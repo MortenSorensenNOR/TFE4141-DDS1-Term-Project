@@ -14,7 +14,7 @@ def MonPro(a_bar, b_bar, n, k):
     return u
 
 def RSA_Montgomery(M, e, n, k):
-    k = k + 1
+    # k = k + 1
     r = 1 << k
     r_square = (r * r) % n
     M_bar = MonPro(M, r_square, n, k)
@@ -43,10 +43,10 @@ def ModularExponentiationVerify(base, exp, mod):
 
     return result
 
-k = 64
+k = 256
 
-p = number.getPrime(16)
-q = number.getPrime(16)
+p = number.getPrime(127)
+q = number.getPrime(127)
 n = (p * q)
 phi = (p - 1) * (q - 1)
 
