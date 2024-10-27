@@ -14,12 +14,13 @@ def MonPro(a_bar, b_bar, n, k):
     return u
 
 def RSA_Montgomery(M, e, n, k):
-    # k = k + 1
+    # Precomputed
     r = 1 << k
-    r_square = (r * r) % n
-    M_bar = MonPro(M, r_square, n, k)
     x_bar = r % n
+    r_square = (r * r) % n
 
+    # Main algorithm
+    M_bar = MonPro(M, r_square, n, k)
     for i in range(k - 1, -1, -1):
         x_bar = MonPro(x_bar, x_bar, n, k)
 

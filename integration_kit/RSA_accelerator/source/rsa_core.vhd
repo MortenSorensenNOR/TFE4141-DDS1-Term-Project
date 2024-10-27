@@ -74,13 +74,13 @@ begin
 		)
 		port map (
 			message   => msgin_data  ,
-			key       => key_e_d     ,
+			key_e_ed  => key_e_d     ,
 			valid_in  => msgin_valid ,
 			ready_in  => msgin_ready ,
 			ready_out => msgout_ready,
 			valid_out => msgout_valid,
-			result    => msgout_data ,
-			modulus   => key_n       ,
+			msg_out   => msgout_data ,
+			key_n     => key_n       ,
 			clk       => clk         ,
 			reset_n   => reset_n
 		);

@@ -1,0 +1,92 @@
+{
+ "builder": {
+  "_logger": "hdl_checker.builders.fallback",
+  "_builtin_libraries": [],
+  "_added_libraries": [
+   {
+    "name": "ieee",
+    "case_sensitive": false,
+    "__class__": "VhdlIdentifier"
+   },
+   {
+    "name": "not_in_project",
+    "case_sensitive": true,
+    "__class__": "Identifier"
+   },
+   {
+    "name": "work",
+    "case_sensitive": false,
+    "__class__": "Identifier"
+   }
+  ],
+  "_version": "<undefined>",
+  "_work_folder": "/home/morten/dev/TFE4141-DDS1-Term-Project/.hdl_checker",
+  "__class__": "Fallback"
+ },
+ "config_file": null,
+ "database": {
+  "sources": [],
+  "inferred_libraries": [],
+  "design_units": [
+   {
+    "owner": {
+     "name": "/home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/Exponentiation/testbench/exponentiation_tb.vhd",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "exponentiation_tb",
+     "case_sensitive": false,
+     "__class__": "VhdlIdentifier"
+    },
+    "locations": [
+     [
+      4,
+      7
+     ]
+    ],
+    "__class__": "VhdlDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/Exponentiation/source/exponentiation.vhd",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "exponentiation",
+     "case_sensitive": false,
+     "__class__": "VhdlIdentifier"
+    },
+    "locations": [
+     [
+      3,
+      7
+     ]
+    ],
+    "__class__": "VhdlDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/source/rsa_core.vhd",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "rsa_core",
+     "case_sensitive": false,
+     "__class__": "VhdlIdentifier"
+    },
+    "locations": [
+     [
+      21,
+      7
+     ]
+    ],
+    "__class__": "VhdlDesignUnit"
+   }
+  ],
+  "__class__": "Database"
+ },
+ "__version__": "0.7.4"
+}
