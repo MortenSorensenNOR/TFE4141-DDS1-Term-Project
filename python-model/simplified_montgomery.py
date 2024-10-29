@@ -25,7 +25,12 @@ def RSA_Montgomery(M, e, n, k):
         x_bar = MonPro(x_bar, x_bar, n, k)
 
         if (e >> i) & 1:
+            print(f"M_bar: {M_bar:064x}")
+            print(f"x_bar: {x_bar:064x}")
+            print(f"n: {n:064x}")
             x_bar = MonPro(M_bar, x_bar, n, k)
+            print(f"x_bar: {x_bar:064x}")
+            print()
 
     x = MonPro(x_bar, 1, n, k)
 
