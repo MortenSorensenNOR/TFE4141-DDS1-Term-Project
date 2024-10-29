@@ -4,7 +4,7 @@ library ieee ;
 
 entity monpro_fsm_v2 is
    generic (
-      DATA_SIZE : natural := 256
+      DATA_SIZE : natural := 257
    ) ;
    port (
       clk : in std_logic;
@@ -211,6 +211,8 @@ architecture behavioral_v2 of monpro_fsm_v2 is
    signal b_reg, b_nxt : std_logic_vector (DATA_SIZE-1 downto 0);
    signal n_reg, n_nxt : std_logic_vector (DATA_SIZE-1 downto 0);
    signal un_reg, un_nxt : std_logic_vector (DATA_SIZE-1 downto 0);
+   signal prev_un_reg, prev_un_nxt : std_logic_vector (DATA_SIZE-1 downto 0);
+
 
    signal cnt_reg, cnt_nxt : natural range 0 to 256;
 begin
@@ -233,6 +235,7 @@ begin
             b_reg <= (OTHERS => '0');
             n_reg <= (OTHERS => '0');
             un_reg <= (OTHERS => '0');
+            prev_un_reg <= (OTHERS => '0');
 
         elsif rising_edge(clk) then
             cnt_reg <= cnt_nxt;
@@ -241,14 +244,15 @@ begin
             n_reg <= n_nxt;
             un_reg <= un_nxt;
             state_reg <= state_nxt;
+            prev_un_reg <= prev_un_nxt;
         end if ;
     end process ; -- CTRL
 
 
-    OPE : process(cnt_reg, a_reg, b_reg, n_reg, un_reg, state_reg, start, A_in, B_in, N_in)
+    OPE : process(cnt_reg, a_reg, b_reg, n_reg, un_reg, state_reg, start, A_in, B_in, N_in, prev_un_reg)
       variable config : std_logic_vector (1 downto 0) := (OTHERS => '0');
     begin
-      config := (un_reg(0) xor (b_reg(0) and a_reg(0))) & a_reg(0);
+      --config := (un_reg(0) xor (b_reg(0) and a_reg(0))) & a_reg(0);
 
       cnt_nxt <= cnt_reg;
       a_nxt <= a_reg;
@@ -256,6 +260,7 @@ begin
       n_nxt <= n_reg;
       un_nxt <= un_reg;
       state_nxt <= state_reg;
+      prev_un_nxt <= prev_un_reg;
 
       x <= '0';
       y <= '0';
@@ -284,8 +289,10 @@ begin
             a_nxt <= '0' & a_reg(DATA_SIZE-1 downto 1);
             cnt_nxt <= cnt_reg + 1; -- the next value will be for the next loading state
             if cnt_reg = 0 then
+               config := (b_reg(0) and a_reg(0)) & a_reg(0);
                un_nxt <= (OTHERS => '0');
             else
+               config := (Unp1_in(0) xor (b_reg(0) and a_reg(0))) & a_reg(0);
                un_nxt <= Unp1_in;
             end if;
             
@@ -311,7 +318,8 @@ begin
             x <= '0';
             y <= '0';
             z <= '0';
-            un_nxt <= Unp1_in;
+            prev_un_nxt <= Unp1_in;
+            un_nxt <= un_reg;
             state_nxt <= CASE_1B;
             
 
@@ -319,7 +327,7 @@ begin
             x <= '1';
             y <= '0';
             z <= '1';
-            --un_nxt <= Unp1_in;
+            un_nxt <= prev_un_nxt;
             state_nxt <= LOADING;
 
          when CASE_2 =>

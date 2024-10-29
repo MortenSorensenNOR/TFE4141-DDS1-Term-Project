@@ -4,7 +4,7 @@ library ieee ;
 
 entity monpro_comb is
    generic (
-      DATA_SIZE : natural := 256
+      DATA_SIZE : natural := 257
    ) ;
    port (
       B : in std_logic_vector (DATA_SIZE-1 downto 0);
@@ -20,7 +20,8 @@ entity monpro_comb is
 end monpro_comb ; 
 
 architecture behavioral of monpro_comb is
-    signal n_b_sig, adder_out_sig, bypass_sig, res_sig : std_logic_vector (DATA_SIZE-1 downto 0);
+    signal n_b_sig, res_sig : std_logic_vector (DATA_SIZE-1 downto 0);
+    signal adder_out_sig, bypass_sig : std_logic_vector (DATA_SIZE-1 downto 0);
 begin
 
 
@@ -49,8 +50,8 @@ begin
    -- Mux for bypassing or not the SRL
    -------------------------------------
    with srl_mux select
-   res_sig <= bypass_sig when '0',
-              ('0' & bypass_sig(DATA_SIZE-1 downto 1)) when '1', -- srl shiffting
+   res_sig <= bypass_sig(DATA_SIZE-1 downto 0) when '0', --257
+              '0' & bypass_sig(DATA_SIZE-1 downto 1) when '1', -- srl shiffting --256
               (OTHERS => '0') when others;
 
    Unp1 <= res_sig; -- output result

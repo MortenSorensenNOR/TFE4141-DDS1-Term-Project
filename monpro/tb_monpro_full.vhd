@@ -8,12 +8,12 @@ end tb_monpro_full ;
 
 architecture testbench of tb_monpro_full is
     --constant HALF_PERIOD : integer := 5;
-    constant DATA_SIZE : natural := 256;
+    constant DATA_SIZE : natural := 257;
 
-    constant A_VAL : std_logic_vector (DATA_SIZE-1 downto 0) := x"1fc255c23a521b8e5ff3c6476dc0387f9baf2b64f388304f544b019cd3828187";
-    constant B_VAL : std_logic_vector (DATA_SIZE-1 downto 0) := x"0f6975d1c4f38f2ea20a4daffaf041284b0768660137d9bee923051bf5a1f6df";
-    constant N_VAL : std_logic_vector (DATA_SIZE-1 downto 0) := x"214113026b14068150e3ea296f64941438a6bd102fa443799b485a2af3cf6177";
-    constant U_VAL : std_logic_vector (DATA_SIZE-1 downto 0) := x"09a938c1475ff745630bee9b68a8faf12e906b169bb72196f18e225293c2bc20";
+    constant A_VAL : std_logic_vector (DATA_SIZE-1 downto 0) := '0'& x"1fc255c23a521b8e5ff3c6476dc0387f9baf2b64f388304f544b019cd3828187";
+    constant B_VAL : std_logic_vector (DATA_SIZE-1 downto 0) := '0'& x"0f6975d1c4f38f2ea20a4daffaf041284b0768660137d9bee923051bf5a1f6df";
+    constant N_VAL : std_logic_vector (DATA_SIZE-1 downto 0) := '0'& x"214113026b14068150e3ea296f64941438a6bd102fa443799b485a2af3cf6177";
+    constant U_VAL : std_logic_vector (DATA_SIZE-1 downto 0) := '0'& x"09a938c1475ff745630bee9b68a8faf12e906b169bb72196f18e225293c2bc20";
     
     signal res_dbg_1, res_dbg_2 : std_logic_vector (DATA_SIZE-1 downto 0); 
 
