@@ -48,6 +48,9 @@ begin
         A_in => A,
         B_in => B,
         N_in => N,
+        result => result
+
+        -- Comb
         Unp1_in => Unp1,
         A_out => A_out, -- unused
         B_out => B_out,
@@ -56,7 +59,6 @@ begin
         x => x,
         y => y,
         z => z,
-        result => result
     );
 
     COMB : entity work.monpro_comb(behavioral)
