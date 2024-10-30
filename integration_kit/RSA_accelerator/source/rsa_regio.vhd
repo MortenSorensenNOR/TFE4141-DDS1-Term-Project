@@ -41,11 +41,11 @@ entity rsa_regio is
 	);
 	port (
 		-- Users to add ports here
-		key_e_d         : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
-		key_n           : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
-		rsa_status      : in  std_logic_vector(31 downto 0);
-		r_precomputed   : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
-		r_pow2_precomputed : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+		key_e_d             : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+		key_n               : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+		rsa_status          : in  std_logic_vector(31 downto 0);
+		r_precomputed       : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+		r_pow2_precomputed  : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 
 		-- User ports ends
 		-- Do not modify the ports beyond this line

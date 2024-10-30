@@ -60,7 +60,11 @@ entity rsa_core is
 		-----------------------------------------------------------------------------
 		key_e_d                 :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 		key_n                   :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0);
-		rsa_status              : out std_logic_vector(31 downto 0)
+		rsa_status              : out std_logic_vector(31 downto 0);
+        
+        -- Precomputed values
+        r                       :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+        r_square                :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0)
 
 	);
 end rsa_core;
@@ -73,14 +77,21 @@ begin
 			C_block_size => C_BLOCK_SIZE
 		)
 		port map (
-			message   => msgin_data  ,
-			key_e_ed  => key_e_d     ,
-			valid_in  => msgin_valid ,
-			ready_in  => msgin_ready ,
+            valid_in  => msgin_valid ,
+            ready_in  => msgin_ready ,
+
+            message   => msgin_data  ,
+            key_e_d   => key_e_d     ,
+            key_n     => key_n       ,
+
+            r         => r,
+            r_square  => r_square,
+
 			ready_out => msgout_ready,
 			valid_out => msgout_valid,
+
 			msg_out   => msgout_data ,
-			key_n     => key_n       ,
+
 			clk       => clk         ,
 			reset_n   => reset_n
 		);

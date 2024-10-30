@@ -13,6 +13,7 @@ entity exponentiation is
 		--input data
 		message 	: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
 		key_e_d 	: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+        key_n 	    : in STD_LOGIC_VECTOR(C_block_size-1 downto 0);
 
         -- Precomputed input data
         r           : in STD_LOGIC_VECTOR (C_block_size-1 downto 0);
@@ -25,12 +26,9 @@ entity exponentiation is
 		--output data
 		msg_out 	: out STD_LOGIC_VECTOR(C_block_size-1 downto 0);
 
-		--key_n
-		key_n 	    : in STD_LOGIC_VECTOR(C_block_size-1 downto 0);
-
 		--utility
 		clk 		: in STD_LOGIC;
-		reset_n 	: in STD_LOGIC;
+		reset_n 	: in STD_LOGIC
 	);
 end exponentiation;
 
@@ -86,7 +84,7 @@ begin
     )
     port map (
         clk => clk,
-        rst => ~reset_n,
+        rst => not reset_n,
 
         start => mon_pro_start,
         ready => mon_pro_ready,
@@ -119,7 +117,7 @@ begin
         Unp1 => mon_pro_comb_U_out,
         n_b_mux => mon_pro_comb_mux_x,
         bypass_mux => mon_pro_comb_mux_y,
-        srl_mux => mon_pro_comb_mux_z,
+        srl_mux => mon_pro_comb_mux_z
     );
     
     -- State
@@ -128,7 +126,7 @@ begin
             if reset_n = '0' then
                 current_state <= IDLE;
                 i <= 256;
-            else then
+            else
                 current_state <= next_state;
             end if;
         end if;
@@ -151,13 +149,13 @@ begin
 
             when COMPUTING_X_BAR =>
                 if mon_pro_done = '1' then
-                    if r_key_e_d[C_block_size-1] = '1' then
+                    if r_key_e_d(C_block_size-1) = '1' then
                         next_state <= COMPUTING_EXPONENT;
-                    else then
+                    else
                         -- i is not yet decremented, so use 1 instead of 0
                         if i = 1 then
                             next_state <= COMPUTE_X;
-                        else then
+                        else
                             next_state <= COMPUTING_X_BAR;
                         end if;
                     end if;
@@ -166,9 +164,9 @@ begin
             when COMPUTING_EXPONENT => 
                 if mon_pro_done then
                     -- i has been decremented now
-                    if i = '0' then
+                    if i = 0 then
                         next_state <= COMPUTE_X;
-                    else then
+                    else
                         next_state <= COMPUTING_X_BAR;
                     end if;
                 end if;
@@ -207,7 +205,7 @@ begin
                 -- Reset output signals
                 valid_out <= '0';
 
-            else then
+            else
                 case current_state is 
                     when IDLE => 
                         -- Reset iteration counter
@@ -235,7 +233,7 @@ begin
                             mon_pro_A <= M_bar;
                             mon_pro_B <= r_r_square;
                             mon_pro_start <= '1';
-                        else then
+                        else
                             mon_pro_start <= '0';
                         end if;
         
@@ -252,7 +250,7 @@ begin
                             mon_pro_A <= x_bar;
                             mon_pro_B <= x_bar;
                             mon_pro_start <= '1';
-                        else then
+                        else
                             mon_pro_start <= '0';
                         end if;
 
@@ -264,7 +262,7 @@ begin
                             mon_pro_A <= M_bar;
                             mon_pro_B <= x_bar;
                             mon_pro_start <= '1';
-                        else then
+                        else
                             mon_pro_start <= '0';
                         end if;
 
@@ -280,7 +278,7 @@ begin
                             mon_pro_B(0) <= '1';
                                 
                             mon_pro_start <= '1';
-                        else then
+                        else
                             mon_pro_start <= '0';
                         end if;
 
@@ -298,6 +296,6 @@ begin
     end process p_signals;
 
     -- Assign output signals
-    ready_in <= (current_state = IDLE);
+    ready_in <= '1' when (current_state = IDLE) else '0';
 
 end expBehave;
