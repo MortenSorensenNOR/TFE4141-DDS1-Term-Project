@@ -213,12 +213,12 @@ architecture behavioral_v2 of monpro_fsm_v2 is
    signal un_reg, un_nxt : std_logic_vector (DATA_SIZE-1 downto 0);
    signal prev_un_reg, prev_un_nxt : std_logic_vector (DATA_SIZE-1 downto 0);
 
-
+   signal x_nxt,y_nxt,z_nxt, x_reg, y_reg, z_reg : std_logic; -- wired to monpro_comb muxes'selection (in order: nb_mux, bypass_mux, srl_mux)
    signal cnt_reg, cnt_nxt : natural range 0 to 256;
 begin
 
    U_out <= un_reg;
-   result <= un_reg;
+   --result <= un_reg;
    A_out <= a_reg;
    B_out <= b_reg;
    N_out <= n_reg;
@@ -236,6 +236,9 @@ begin
             n_reg <= (OTHERS => '0');
             un_reg <= (OTHERS => '0');
             prev_un_reg <= (OTHERS => '0');
+            x_reg <= '0';
+            y_reg <= '0';
+            z_reg <= '0';
 
         elsif rising_edge(clk) then
             cnt_reg <= cnt_nxt;
@@ -245,11 +248,16 @@ begin
             un_reg <= un_nxt;
             state_reg <= state_nxt;
             prev_un_reg <= prev_un_nxt;
+            x_reg <= x_nxt;
+            y_reg <= y_nxt;
+            z_reg <= z_nxt;
         end if ;
     end process ; -- CTRL
 
 
-    OPE : process(cnt_reg, a_reg, b_reg, n_reg, un_reg, state_reg, start, A_in, B_in, N_in, prev_un_reg)
+    OPE : process(cnt_reg, a_reg, b_reg, n_reg, un_reg, state_reg, start, A_in, B_in, N_in, prev_un_reg,x_reg,
+    y_reg,
+    z_reg)
       variable config : std_logic_vector (1 downto 0) := (OTHERS => '0');
     begin
       --config := (un_reg(0) xor (b_reg(0) and a_reg(0))) & a_reg(0);
@@ -262,13 +270,14 @@ begin
       state_nxt <= state_reg;
       prev_un_nxt <= prev_un_reg;
 
-      --x <= '0';
-      --y <= '0';
-      --z <= '0';
+      x_nxt <= x_reg;
+      y_nxt <= y_reg;
+      z_nxt <= z_reg;
 
       ready <= '0';
       valid <= '0';
 
+      result <= (OTHERS => '0');
 
 
       case( state_reg ) is
@@ -279,9 +288,10 @@ begin
             a_nxt <= A_in;
             b_nxt <= B_in;
             n_nxt <= N_in;
-            x <= '0';
-            y <= '0';
-            z <= '0';
+            x_nxt <= '0';
+            y_nxt <= '0';
+            z_nxt <= '0';
+            un_nxt <= (OTHERS => '0');
             if start = '1' then
                state_nxt <= LOADING;
             else
@@ -291,25 +301,41 @@ begin
          when LOADING =>
             a_nxt <= '0' & a_reg(DATA_SIZE-1 downto 1);
             cnt_nxt <= cnt_reg + 1; -- the next value will be for the next loading state
+            un_nxt <= Unp1_in;
             if cnt_reg = 0 then
                config := (b_reg(0) and a_reg(0)) & a_reg(0);
-               un_nxt <= (OTHERS => '0');
+               --un_nxt <= (OTHERS => '0');
             else
                config := (Unp1_in(0) xor (b_reg(0) and a_reg(0))) & a_reg(0);
-               un_nxt <= Unp1_in;
+               
             end if;
             
             if cnt_reg = DATA_SIZE then
+               x_nxt <= '0';
+               y_nxt <= '0';
+               z_nxt <= '0';
                state_nxt <= FINISHED; -- End of A reached
             else
                case( config ) is
                when "00" =>
+                  x_nxt <= '0'; -- d.c
+                  y_nxt <= '1';
+                  z_nxt <= '1';
                   state_nxt <= CASE_4;
                when "01" =>      
+                  x_nxt <= '0';
+                  y_nxt <= '0';
+                  z_nxt <= '1';
                   state_nxt <= CASE_2;
                when "10" =>
+                  x_nxt <= '1';
+                  y_nxt <= '0';
+                  z_nxt <= '1';
                   state_nxt <= CASE_3;
                when "11" =>
+                  x_nxt <= '0';
+                  y_nxt <= '0';
+                  z_nxt <= '0';
                   state_nxt <= CASE_1;
                when others =>
                   state_nxt <= IDLE; -- Error
@@ -318,42 +344,29 @@ begin
             
 
          when CASE_1 =>
-            x <= '0';
-            y <= '0';
-            z <= '0';
+            x_nxt <= '1';
+            y_nxt <= '0';
+            z_nxt <= '1';
             --prev_un_nxt <= Unp1_in;
             --un_nxt <= un_reg;
-            un_nxt <= Unp1_in;
-
+            --un_nxt <= Unp1_in;
             state_nxt <= CASE_1B;
             
 
          when CASE_1B =>
-            x <= '1';
-            y <= '0';
-            z <= '1';
             --un_nxt <= prev_un_nxt;
-            --un_nxt <= Unp1_in;
-            state_nxt <= LOADING;
-
-         when CASE_2 =>
-            x <= '0';
-            y <= '0';
-            z <= '1';
             un_nxt <= Unp1_in;
             state_nxt <= LOADING;
 
+         when CASE_2 =>
+            --un_nxt <= Unp1_in;
+            state_nxt <= LOADING;
+
          when CASE_3 =>
-            x <= '1';
-            y <= '0';
-            z <= '1';
             --un_nxt <= Unp1_in;
             state_nxt <= LOADING;
 
          when CASE_4 =>
-            x <= '0'; -- d.c
-            y <= '1';
-            z <= '1';
             --un_nxt <= Unp1_in;
             state_nxt <= LOADING;
 
@@ -368,4 +381,9 @@ begin
       end case ;
  
     end process ; -- OPE
+
+    x <= x_reg;
+    y <= y_reg;
+    z <= z_reg;
 end architecture ;
+
