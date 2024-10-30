@@ -68,7 +68,59 @@ architecture expBehave of exponentiation is
     -- MonPro output data signals
     signal mon_pro_u : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
 
+    -- MonPro Combinational signals (input and output from combinational computation block)
+    signal mon_pro_comb_A_in : STD_LOGIC_VECTOR (C_block_size downto 0);
+    signal mon_pro_comb_B_in : STD_LOGIC_VECTOR (C_block_size downto 0);
+    signal mon_pro_comb_N_in : STD_LOGIC_VECTOR (C_block_size downto 0);
+    signal mon_pro_comb_U_in : STD_LOGIC_VECTOR (C_block_size downto 0);
+    signal mon_pro_comb_U_out : STD_LOGIC_VECTOR (C_block_size downto 0);
+    signal mon_pro_comb_mux_x : STD_LOGIC;
+    signal mon_pro_comb_mux_y : STD_LOGIC;
+    signal mon_pro_comb_mux_z : STD_LOGIC;
+
 begin
+
+    u_mon_pro_fsm : entity work.monpro_fsm_v2(behavioral_v2)
+    generic map (
+        DATA_SIZE => C_block_size + 1
+    )
+    port map (
+        clk => clk,
+        rst => ~reset_n,
+
+        start => mon_pro_start,
+        ready => mon_pro_ready,
+        valid => mon_pro_done,
+
+        A_in => mon_pro_A,
+        B_in => mon_pro_B,
+        N_in => mon_pro_key_n,
+        result => mon_pro_u,
+
+        -- MonPro Comb signals
+        A_out => mon_pro_comb_A_in,
+        B_out => mon_pro_comb_B_in,
+        N_out => mon_pro_comb_N_in,
+        U_out => mon_pro_comb_U_in,
+        Unp1_in => mon_pro_comb_U_out,
+        x => mon_pro_comb_mux_x,
+        y => mon_pro_comb_mux_y,
+        z => mon_pro_comb_mux_z
+    );
+
+    u_mon_pro_comb: entity work.monpro_comb(behavioral)
+    generic map (
+        DATA_SIZE => C_block_size + 1
+    )
+    port map (
+        B => mon_pro_comb_B_in,
+        N => mon_pro_comb_N_in,
+        Un => mon_pro_comb_U_in,
+        Unp1 => mon_pro_comb_U_out,
+        n_b_mux => mon_pro_comb_mux_x,
+        bypass_mux => mon_pro_comb_mux_y,
+        srl_mux => mon_pro_comb_mux_z,
+    );
     
     -- State
     p_state_transition: process (clk) is begin
