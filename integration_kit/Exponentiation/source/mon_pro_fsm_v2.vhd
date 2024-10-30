@@ -386,4 +386,3 @@ begin
     y <= y_reg;
     z <= z_reg;
 end architecture ;
-

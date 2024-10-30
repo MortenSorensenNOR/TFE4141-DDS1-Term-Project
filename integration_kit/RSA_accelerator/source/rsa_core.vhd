@@ -61,10 +61,9 @@ entity rsa_core is
 		key_e_d                 :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 		key_n                   :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 		rsa_status              : out std_logic_vector(31 downto 0);
-        
-        -- Precomputed values
-        r                       :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0);
-        r_square                :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0)
+
+		r                       :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+		r_square                :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0)
 
 	);
 end rsa_core;
@@ -80,12 +79,12 @@ begin
             valid_in  => msgin_valid ,
             ready_in  => msgin_ready ,
 
-            message   => msgin_data  ,
-            key_e_d   => key_e_d     ,
+			message   => msgin_data  ,
+			key_e_d   => key_e_d     ,
             key_n     => key_n       ,
 
-            r         => r,
-            r_square  => r_square,
+            r         => r           ,
+            r_square  => r_square    ,
 
 			ready_out => msgout_ready,
 			valid_out => msgout_valid,

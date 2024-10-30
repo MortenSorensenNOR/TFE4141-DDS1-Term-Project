@@ -105,10 +105,9 @@ architecture rtl of rsa_accelerator is
 	signal key_e_d      : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 	signal key_n        : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 	signal rsa_status   : std_logic_vector(31 downto 0);
-        
-    -- Precomputed values
-    signal r                       :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0);
-    signal r_square                :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+
+	signal r            : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+	signal r_square     : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 
 begin
 
@@ -125,8 +124,8 @@ u_rsa_regio : entity work.rsa_regio
 		key_n                   => key_n,
 		rsa_status              => rsa_status,
 
-        r_precomputed           => r,
-        r_pow2_precomputed      => r_square,
+		r_precomputed       => r,
+		r_pow2_precomputed  => r_square,
 
 		S_AXI_ACLK              => clk,
 		S_AXI_ARESETN           => reset_n,
@@ -231,10 +230,10 @@ u_rsa_core : entity work.rsa_core
 		key_e_d                => key_e_d,
 		key_n                  => key_n,
 		rsa_status             => rsa_status,
-        
-        -- Precomputed values
+
         r                      => r,
         r_square               => r_square
+
 	);
 
 end rtl;

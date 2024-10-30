@@ -42,16 +42,16 @@ architecture expBehave of exponentiation is
     signal i : integer range 0 to 256 := 256;
 
     -- Shift register for key_e_d
-    signal r_key_e_d : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
+    signal r_key_e_d : STD_LOGIC_VECTOR (C_block_size downto 0);
 
     -- Data registers
-    signal x_bar : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
-    signal M_bar : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
+    signal x_bar : STD_LOGIC_VECTOR (C_block_size downto 0);
+    signal M_bar : STD_LOGIC_VECTOR (C_block_size downto 0);
     
-    signal x : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
+    signal x : STD_LOGIC_VECTOR (C_block_size downto 0);
 
     -- Save the r_square value
-    signal r_r_square : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
+    signal r_r_square : STD_LOGIC_VECTOR (C_block_size downto 0);
 
     -- MonPro signals
     signal mon_pro_ready : STD_LOGIC; 
@@ -59,12 +59,12 @@ architecture expBehave of exponentiation is
     signal mon_pro_start : STD_LOGIC;
 
     -- MonPro input data signals
-    signal mon_pro_A : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
-    signal mon_pro_B : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
-    signal mon_pro_key_n : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
+    signal mon_pro_A : STD_LOGIC_VECTOR (C_block_size downto 0);
+    signal mon_pro_B : STD_LOGIC_VECTOR (C_block_size downto 0);
+    signal mon_pro_key_n : STD_LOGIC_VECTOR (C_block_size downto 0);
 
     -- MonPro output data signals
-    signal mon_pro_u : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
+    signal mon_pro_u : STD_LOGIC_VECTOR (C_block_size downto 0);
 
     -- MonPro Combinational signals (input and output from combinational computation block)
     signal mon_pro_comb_A_in : STD_LOGIC_VECTOR (C_block_size downto 0);
@@ -217,12 +217,12 @@ begin
 
                         -- Data
                         if valid_in = '1' then
-                            M_bar <= message;       -- Assign start value for M, will be used to compute M_bar
-                            x_bar <= r;             -- Start value is r mod n
-                            r_r_square <= r_square; -- Save for later
-                            r_key_e_d  <= key_e_d;
+                            M_bar <= '0' & message;       -- Assign start value for M, will be used to compute M_bar
+                            x_bar <= '0' & r;             -- Start value is r mod n
+                            r_r_square <= '0' & r_square; -- Save for later
+                            r_key_e_d  <= '0' & key_e_d;
 
-                            mon_pro_key_n <= key_n; -- Wont change during RSA compute
+                            mon_pro_key_n <= '0' & key_n; -- Wont change during RSA compute
                         end if;
 
                     when COMPUTE_M_BAR =>
@@ -244,7 +244,7 @@ begin
                             mon_pro_start <= '0';
 
                             -- Shift register for exponent
-                            r_key_e_d <= r_key_e_d(C_block_size - 2 downto 0) & '0';
+                            r_key_e_d <= r_key_e_d(C_block_size - 1 downto 0) & '0';
 
                         elsif mon_pro_ready = '1' then
                             mon_pro_A <= x_bar;
@@ -284,7 +284,7 @@ begin
 
                     when DONE => 
                         valid_out <= '1';        
-                        msg_out <= x;
+                        msg_out <= x(C_block_size-1 downto 0);
 
                     when others =>
                         i <= 256;
@@ -299,3 +299,4 @@ begin
     ready_in <= '1' when (current_state = IDLE) else '0';
 
 end expBehave;
+
