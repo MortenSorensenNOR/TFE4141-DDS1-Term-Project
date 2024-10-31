@@ -1,8 +1,8 @@
 def MonPro(a_bar, b_bar, n, k):
     print("*********************")
-    print(f"/A = {a_bar:064x}")
-    print(f"/B = {b_bar:064x}")
-    print(f"n = {n:064x}")
+    print(f"/A = {a_bar:08x}")
+    print(f"/B = {b_bar:08x}")
+    print(f"n = {n:08x}")
     print(f"k = {k}")
     
     u = 0
@@ -30,12 +30,12 @@ def MonPro(a_bar, b_bar, n, k):
         if u & 1:
             u = u + n
         u = u >> 1
-        print(f"Un+1 : {u:064x}")
+        print(f"Un+1 : {u:08x}")
     return u
 
-A = int("1fc255c23a521b8e5ff3c6476dc0387f9baf2b64f388304f544b019cd3828187", 16)
-B = int("0f6975d1c4f38f2ea20a4daffaf041284b0768660137d9bee923051bf5a1f6df", 16)
-N = int("214113026b14068150e3ea296f64941438a6bd102fa443799b485a2af3cf6177", 16)
+A = int("2cfa92f666437733", 16)
+B = int("c0bf71cc942bada", 16)
+N = int("3567cae757bd801f", 16)
 
-MonPro(A, B, N, 256);
+MonPro(A, B, N, 64);
 

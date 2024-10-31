@@ -791,6 +791,7 @@ n:		3567cae757bd801f
 k:		64
 U:		c0bf71cc942bada
 ================================
+THIS ONE IS THE ONE I AM USING
 A:		2cfa92f666437733
 B:		c0bf71cc942bada
 n:		3567cae757bd801f
