@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <verilated.h>
 #include <verilated_vcd_c.h>
-#include "obj_dir/Vmonpro.h"
+#include "obj_dir/Vtb_monpro.h"
 
 #define DATAWIDTH 64
 #define RESET_CLKS 8
@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
     srand(time(NULL));
 
     Verilated::commandArgs(argc, argv);
-    Vmonpro* dut = new Vmonpro;
+    Vtb_monpro* dut = new Vtb_monpro;
     
     Verilated::traceEverOn(true);
     VerilatedVcdC* m_trace = new VerilatedVcdC;
@@ -25,9 +25,9 @@ int main(int argc, char** argv) {
         dut->clk ^= 1;
         dut->eval();
 
-        dut->i_A = 0;
-        dut->i_B = 0;
-        dut->i_N = 0;
+        // dut->i_A = 0;
+        // dut->i_B = 0;
+        // dut->i_N = 0;
         dut->start = 0;
         dut->rstn = 0;
     
@@ -47,21 +47,28 @@ int main(int argc, char** argv) {
     
         if (dut->clk == 1) {
             posedge_cnt++;
-            dut->i_A = 0;
-            dut->i_B = 0;
-            dut->i_N = 0;
+            // dut->i_A = 0;
+            // dut->i_B = 0;
+            // dut->i_N = 0;
             dut->start = 0;
 
             if (posedge_cnt == 8) {
-                dut->i_A = A;
-                dut->i_B = B;
-                dut->i_N = N;
+                // dut->i_A = A;
+                // dut->i_B = B;
+                // dut->i_N = N;
                 dut->start = 1;
             }
 
+            static int was_valid = 0;
             if (dut->o_valid) {
-                printf("Expected: %08X\t Got: %08X\n", expected_U, dut->o_U);
-                break;
+                was_valid = 1;
+            }
+
+            if (was_valid) {
+                static int clk_count_wait_done = 0;
+                clk_count_wait_done++;
+                if (clk_count_wait_done == 64)
+                    break;
             }
         }
 

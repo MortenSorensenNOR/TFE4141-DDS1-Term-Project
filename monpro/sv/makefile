@@ -1,4 +1,5 @@
-MODULE=monpro
+MODULE=tb_monpro
+DUT = monpro
 
 .PHONY:sim
 sim: waveform.vcd
@@ -25,12 +26,12 @@ waveform.vcd: ./obj_dir/V$(MODULE)
 	@echo "### BUILDING SIM ###"
 	make -C obj_dir -f V$(MODULE).mk V$(MODULE)
 
-.stamp.verilate: $(MODULE).sv tb_$(MODULE).cpp
+.stamp.verilate: $(MODULE).sv $(DUT).sv $(MODULE).cpp
 	@echo
 	@echo "### VERILATING ###"
 	verilator -Wall --trace --x-assign unique --x-initial unique \
-		-cc $(MODULE).sv \
-		--exe tb_$(MODULE).cpp
+		-cc $(MODULE).sv $(DUT).sv \
+		--exe $(MODULE).cpp
 	@touch .stamp.verilate
 
 .PHONY:lint

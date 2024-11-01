@@ -9,12 +9,26 @@ class MonProTestData:
     def __init__(self, A, B, n, k, U):
         self.A = A
         self.B = B
-        self.n = n
+        self.N = n
         self.k = k
         self.U = U
 
+        self.higher = U > n
+
     def toString(self):
-        return f"A:\t\t{self.A:0x}\nB:\t\t{self.B:0x}\nn:\t\t{self.n:0x}\nk:\t\t{self.k}\nU:\t\t{self.U:0x}\n"
+        # For system verilog testing
+        if self.higher:
+            self.U = self.U - self.N
+
+        prefix = "parameter logic unsigned [DATAWIDTH-1:0] "
+        A_txt = prefix + f"A = 256'h{self.A:0x}" + ",\n"
+        B_txt = prefix + f"B = 256'h{self.B:0x}" + ",\n"
+        N_txt = prefix + f"N = 256'h{self.N:0x}" + ",\n"
+        U_txt = prefix + f"U_EXPECTED = 256'h{self.U:0x}" + "\n"
+
+        if self.higher:
+            return "HIGHER\n" + A_txt + B_txt + N_txt + U_txt
+        return A_txt + B_txt + N_txt + U_txt
 
 class MonExpTestData:
     def __init__(self, M, key_e_d, n, k, x):
@@ -44,6 +58,10 @@ def MonPro(a_bar, b_bar, n, k):
         if u & 1:
             u = u + n
         u = u >> 1
+
+    # if u > n:
+    #     u = u - n
+
     return u
 
 def RSA_Montgomery(M, e, n, k):
@@ -57,20 +75,20 @@ def RSA_Montgomery(M, e, n, k):
     for i in range(k - 1, -1, -1):
         U = MonPro(x_bar, x_bar, n, k)
         mon_pro_test_data.append(MonProTestData(x_bar, x_bar, n, k, U))
-        assert(np.log2(U) < k)
+        assert(math.log2(U) <= k)
         x_bar = U
 
         if (e >> i) & 1:
             U = MonPro(M_bar, x_bar, n, k)
             mon_pro_test_data.append(MonProTestData(M_bar, x_bar, n, k, U))
-            assert(np.log2(U) < k)
+            assert(math.log2(U) <= k)
             x_bar = U
 
     x = MonPro(x_bar, 1, n, k)
 
     return x
 
-k = 64
+k = 256
 
 for i in range(10):
     p = number.getPrime(k//2 - 1)

@@ -37,6 +37,14 @@ module monpro #(
 
     logic unsigned [DATAWIDTH:0] U_reg;
 
+    /* verilator lint_off UNUSED */
+    logic w_A_i;
+    logic w_B_0;
+    logic w_U_0;
+    logic w_A_and_B;
+    logic w_is_odd;
+    /* verilator lint_on UNUSED */
+
     // Combinational
     logic unsigned [DATAWIDTH:0] adder_input;
     logic unsigned [DATAWIDTH:0] adder_result;
@@ -46,13 +54,6 @@ module monpro #(
     logic adder_input_mux_select, adder_bypass_mux_select, adder_result_shift_mux_select;
 
     always_comb begin
-        case (current_state)
-
-            default: begin
-                // mux select signals will be latched
-            end
-        endcase
-
         // Select adder input
         if (adder_input_mux_select) begin
             adder_input = {1'b0, r_N};
@@ -102,11 +103,11 @@ module monpro #(
                 if (i_cnt == DATAWIDTH) begin
                     next_state = MONPRO_DONE;
                 end else begin
-                    if (r_A[0] && U_reg[0]) begin
+                    if (w_A_i & w_is_odd) begin
                         next_state = MONPRO_CASE1A;
-                    end else if (r_A[0] && ~U_reg[0]) begin
+                    end else if (w_A_i & ~w_is_odd) begin
                         next_state = MONPRO_CASE2;
-                    end else if (~r_A[0] && U_reg[0]) begin
+                    end else if (~w_A_i & w_is_odd) begin
                         next_state = MONPRO_CASE3;
                     end else begin
                         next_state = MONPRO_CASE4;
@@ -175,15 +176,15 @@ module monpro #(
                 end
 
                 MONPRO_LOAD: begin
-                    if (r_A[0] && U_reg[0]) begin
+                    if (w_A_i & w_is_odd) begin
                         adder_input_mux_select <= 0;
                         adder_bypass_mux_select <= 0;
                         adder_result_shift_mux_select <= 1;
-                    end else if (r_A[0] && ~U_reg[0]) begin
+                    end else if (w_A_i & ~w_is_odd) begin
                         adder_input_mux_select <= 0;
                         adder_bypass_mux_select <= 0;
                         adder_result_shift_mux_select <= 0;
-                    end else if (~r_A[0] && U_reg[0]) begin
+                    end else if (~w_A_i & w_is_odd) begin
                         adder_input_mux_select <= 1;
                         adder_bypass_mux_select <= 0;
                         adder_result_shift_mux_select <= 0;
@@ -231,5 +232,11 @@ module monpro #(
             endcase
         end
     end
+
+    assign w_A_i = r_A[0];
+    assign w_B_0 = r_B[0];
+    assign w_U_0 = U_reg[0];
+    assign w_A_and_B = w_A_i & w_B_0;
+    assign w_is_odd = w_U_0 ^ (w_A_and_B);
 
 endmodule

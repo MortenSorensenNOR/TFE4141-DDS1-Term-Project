@@ -33,9 +33,10 @@ def MonPro(a_bar, b_bar, n, k):
         print(f"Un+1 : {u:08x}")
     return u
 
-A = int("2cfa92f666437733", 16)
-B = int("c0bf71cc942bada", 16)
-N = int("3567cae757bd801f", 16)
+A = int("1b254b238f68e0d59c0ee12a1c426115d0a47c748199f1b1bf912d35bb54ba4b", 16)
+B = int("1b254b238f68e0d59c0ee12a1c426115d0a47c748199f1b1bf912d35bb54ba4b", 16)
+N = int("19bfb084128dd8d58b7ab2b15fc9b082746e37ffd238398df42fa049b078ccbd", 16)
+U_EXPECTED = int("5356fc9e2c6b3bd55ae47135933a28bd8c19e8181b4c27a56df73884b1179f5", 16)
 
-MonPro(A, B, N, 64);
+MonPro(A, B, N, 256);
 
