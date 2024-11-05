@@ -3,10 +3,10 @@
 module tb_monpro #(
     parameter unsigned DATAWIDTH = 256,
 
-    parameter logic unsigned [DATAWIDTH-1:0] A = 256'h12d456b52fa348795ea45d718801f8b06f36e8dfb75a67edb55c3f24802639dc,
-    parameter logic unsigned [DATAWIDTH-1:0] B = 256'ha428af0aabd7dd0c3010b45dbc7634cb64d24c0582925701dd93aa34c2f108d,
-    parameter logic unsigned [DATAWIDTH-1:0] N = 256'h19bfb084128dd8d58b7ab2b15fc9b082746e37ffd238398df42fa049b078ccbd,
-    parameter logic unsigned [DATAWIDTH-1:0] U_EXPECTED = 256'h8135951beae3febd4223575ca05ef93dfa1f34400e1a532d94ee29520104d16
+    parameter logic unsigned [DATAWIDTH-1:0] A = 256'h1f94373be50b1cc0ced44eebde66dd7acb02d59c51941d2497184c45aab39f5f,
+    parameter logic unsigned [DATAWIDTH-1:0] B = 256'h1f94373be50b1cc0ced44eebde66dd7acb02d59c51941d2497184c45aab39f5f,
+    parameter logic unsigned [DATAWIDTH-1:0] N = 256'h2e5f7417fd9c9471c4ee1077900d7e4051e4d3f682b95bc27f5d128e05df33b5,
+    parameter logic unsigned [DATAWIDTH-1:0] U_EXPECTED = 256'h1362a24b630a8e265b65d361fb91a90e5a2dc8b25bb2ccc2afc1d440adedd68
     ) (
     input logic clk,
     input logic rstn,

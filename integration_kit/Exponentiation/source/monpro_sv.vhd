@@ -44,7 +44,7 @@ architecture behavioral of monpro_sv is
     signal adder_bypass_result : std_logic_vector (DATA_SIZE downto 0);
     signal monpro_comb_result : std_logic_vector (DATA_SIZE downto 0);
 
-    signal adder_input_mux_select, adder_bypass_mux_select, adder_result_shift_mux_select : std_logic;
+    signal alu_sub_mode, adder_input_mux_select, adder_bypass_mux_select, adder_result_shift_mux_select : std_logic;
 
     -- FSM STATES
     type FSM_STATE is ( MONPRO_IDLE,
@@ -54,6 +54,7 @@ architecture behavioral of monpro_sv is
                         MONPRO_CASE2,
                         MONPRO_CASE3,
                         MONPRO_CASE4,
+                        MONPRO_LAST_SUB,
                         MONPRO_DONE );
     signal current_state, next_state : FSM_STATE; 
     
@@ -61,7 +62,8 @@ begin
     ----------------------------------
     -- MONPRO Combinational process
     ----------------------------------
-    MONPRO_COMB : process(  adder_input_mux_select,
+    MONPRO_COMB : process(  alu_sub_mode,
+                            adder_input_mux_select,
                             adder_bypass_mux_select,
                             adder_result_shift_mux_select,
                             U_reg,
@@ -82,7 +84,11 @@ begin
         -------------------------------------
         -- Adder
         -------------------------------------
-        adder_result <= std_logic_vector(unsigned(U_reg) + unsigned(adder_input));
+        if alu_sub_mode = '1' then
+            adder_result <= std_logic_vector(unsigned(U_reg) - unsigned(adder_input));
+        else
+            adder_result <= std_logic_vector(unsigned(U_reg) + unsigned(adder_input));
+        end if;
 
         -------------------------------------
         -- BYPASS MUX
@@ -139,7 +145,11 @@ begin
 
             when MONPRO_LOAD =>
                 if cnt_i = DATA_SIZE then
-                    next_state <= MONPRO_DONE;
+                    if (U_reg >= ('0' & r_N)) then
+                        next_state <= MONPRO_LAST_SUB;
+                    else 
+                        next_state <= MONPRO_DONE;
+                    end if;
                 else 
                     if (w_A_i='1' and w_is_odd='1') then
                         next_state <= MONPRO_CASE1A;
@@ -166,6 +176,9 @@ begin
 
             when MONPRO_CASE4 =>
                 next_state <= MONPRO_LOAD;
+
+            when MONPRO_LAST_SUB => 
+                next_state <= MONPRO_DONE;
 
             when MONPRO_DONE =>
                 next_state <= MONPRO_IDLE;
@@ -212,25 +225,38 @@ begin
                 
 
                     when MONPRO_LOAD =>
-                        if (w_A_i='1' and w_is_odd='1') then
-                            adder_input_mux_select <= '0';
-                            adder_bypass_mux_select <= '0';
-                            adder_result_shift_mux_select <= '1';
-                        elsif (w_A_i='1' and w_is_odd='0') then
-                            adder_input_mux_select <= '0';
-                            adder_bypass_mux_select <= '0';
-                            adder_result_shift_mux_select <= '0';
-                        elsif (w_A_i='0' and w_is_odd='1') then
-                            adder_input_mux_select <= '1';
-                            adder_bypass_mux_select <= '0';
-                            adder_result_shift_mux_select <= '0';
-                        else
-                            adder_input_mux_select <= '1';
-                            adder_bypass_mux_select <= '1';
-                            adder_result_shift_mux_select <= '0';
+                        if (cnt_i = DATA_SIZE) then
+                            if (U_reg >= ('0' & r_N)) then
+                                alu_sub_mode <= '1';
+                                adder_input_mux_select <= '1';
+                                adder_bypass_mux_select <= '0';
+                                adder_result_shift_mux_select <= '1';
+                            end if;
+                        else 
+                            if (w_A_i='1' and w_is_odd='1') then
+                                alu_sub_mode <= '0';
+                                adder_input_mux_select <= '0';
+                                adder_bypass_mux_select <= '0';
+                                adder_result_shift_mux_select <= '1';
+                            elsif (w_A_i='1' and w_is_odd='0') then
+                                alu_sub_mode <= '0';
+                                adder_input_mux_select <= '0';
+                                adder_bypass_mux_select <= '0';
+                                adder_result_shift_mux_select <= '0';
+                            elsif (w_A_i='0' and w_is_odd='1') then
+                                alu_sub_mode <= '0';
+                                adder_input_mux_select <= '1';
+                                adder_bypass_mux_select <= '0';
+                                adder_result_shift_mux_select <= '0';
+                            else
+                                alu_sub_mode <= '0';
+                                adder_input_mux_select <= '1';
+                                adder_bypass_mux_select <= '1';
+                                adder_result_shift_mux_select <= '0';
+                            end if;
+                            cnt_i <= cnt_i + 1;
+                            r_A <= '0' & r_A(DATA_SIZE-1 downto 1);
                         end if;
-                        cnt_i <= cnt_i + 1;
-                        r_A <= '0' & r_A(DATA_SIZE-1 downto 1);
                     
 
                     when MONPRO_CASE1A =>
@@ -249,6 +275,9 @@ begin
                         U_reg <= monpro_comb_result;
 
                     when MONPRO_CASE4 =>
+                        U_reg <= monpro_comb_result;
+
+                    when MONPRO_LAST_SUB =>
                         U_reg <= monpro_comb_result;
 
                     when MONPRO_DONE =>

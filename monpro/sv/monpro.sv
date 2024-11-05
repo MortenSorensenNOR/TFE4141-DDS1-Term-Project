@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-typedef enum logic [2:0] {
+typedef enum logic [3:0] {
     MONPRO_IDLE,
     MONPRO_LOAD,
     MONPRO_CASE1A,
@@ -8,6 +8,7 @@ typedef enum logic [2:0] {
     MONPRO_CASE2,
     MONPRO_CASE3,
     MONPRO_CASE4,
+    MONPRO_LAST_SUB,
     MONPRO_DONE
 } monpro_state_t;
 
@@ -51,7 +52,10 @@ module monpro #(
     logic unsigned [DATAWIDTH:0] adder_bypass_result;
     logic unsigned [DATAWIDTH:0] monpro_comb_result;
 
-    logic adder_input_mux_select, adder_bypass_mux_select, adder_result_shift_mux_select;
+    logic alu_sub_mode = 0;
+    logic adder_input_mux_select = 0;
+    logic adder_bypass_mux_select = 0;
+    logic adder_result_shift_mux_select = 0;
 
     always_comb begin
         // Select adder input
@@ -61,7 +65,11 @@ module monpro #(
             adder_input = {1'b0, r_B};
         end
 
-        adder_result = U_reg + adder_input;
+        if (alu_sub_mode) begin
+            adder_result = U_reg - adder_input;
+        end else begin
+            adder_result = U_reg + adder_input;
+        end
 
         if (adder_bypass_mux_select) begin
             adder_bypass_result = U_reg;
@@ -101,7 +109,11 @@ module monpro #(
 
             MONPRO_LOAD: begin
                 if (i_cnt == DATAWIDTH) begin
-                    next_state = MONPRO_DONE;
+                    if (U_reg >= {1'b0, r_N}) begin
+                        next_state = MONPRO_LAST_SUB;
+                    end else begin
+                        next_state = MONPRO_DONE;
+                    end
                 end else begin
                     if (w_A_i & w_is_odd) begin
                         next_state = MONPRO_CASE1A;
@@ -133,6 +145,10 @@ module monpro #(
 
             MONPRO_CASE4: begin
                 next_state = MONPRO_LOAD;
+            end
+
+            MONPRO_LAST_SUB: begin
+                next_state = MONPRO_DONE;
             end
 
             MONPRO_DONE: begin
@@ -176,25 +192,38 @@ module monpro #(
                 end
 
                 MONPRO_LOAD: begin
-                    if (w_A_i & w_is_odd) begin
-                        adder_input_mux_select <= 0;
-                        adder_bypass_mux_select <= 0;
-                        adder_result_shift_mux_select <= 1;
-                    end else if (w_A_i & ~w_is_odd) begin
-                        adder_input_mux_select <= 0;
-                        adder_bypass_mux_select <= 0;
-                        adder_result_shift_mux_select <= 0;
-                    end else if (~w_A_i & w_is_odd) begin
-                        adder_input_mux_select <= 1;
-                        adder_bypass_mux_select <= 0;
-                        adder_result_shift_mux_select <= 0;
+                    if (i_cnt == DATAWIDTH) begin
+                        if (U_reg >= {1'b0, r_N}) begin
+                            alu_sub_mode <= 1;
+                            adder_input_mux_select <= 1;
+                            adder_bypass_mux_select <= 0;
+                            adder_result_shift_mux_select <= 1;
+                        end
                     end else begin
-                        adder_input_mux_select <= 1;
-                        adder_bypass_mux_select <= 1;
-                        adder_result_shift_mux_select <= 0;
+                        if (w_A_i & w_is_odd) begin
+                            alu_sub_mode <= 0;
+                            adder_input_mux_select <= 0;
+                            adder_bypass_mux_select <= 0;
+                            adder_result_shift_mux_select <= 1;
+                        end else if (w_A_i & ~w_is_odd) begin
+                            alu_sub_mode <= 0;
+                            adder_input_mux_select <= 0;
+                            adder_bypass_mux_select <= 0;
+                            adder_result_shift_mux_select <= 0;
+                        end else if (~w_A_i & w_is_odd) begin
+                            alu_sub_mode <= 0;
+                            adder_input_mux_select <= 1;
+                            adder_bypass_mux_select <= 0;
+                            adder_result_shift_mux_select <= 0;
+                        end else begin
+                            alu_sub_mode <= 0;
+                            adder_input_mux_select <= 1;
+                            adder_bypass_mux_select <= 1;
+                            adder_result_shift_mux_select <= 0;
+                        end
+                        i_cnt <= i_cnt + 1;
+                        r_A <= {1'b0, r_A[DATAWIDTH-1:1]};
                     end
-                    i_cnt <= i_cnt + 1;
-                    r_A <= {1'b0, r_A[DATAWIDTH-1:1]};
                 end
 
                 MONPRO_CASE1A: begin
@@ -217,6 +246,10 @@ module monpro #(
                 end
 
                 MONPRO_CASE4: begin
+                    U_reg <= monpro_comb_result;
+                end
+
+                MONPRO_LAST_SUB: begin
                     U_reg <= monpro_comb_result;
                 end
 
