@@ -39,7 +39,15 @@ class MonExpTestData:
         self.x = x
 
     def toString(self):
-        return f"M:\t\t\t{self.M:0x}\nkey_e_d:\t{self.key_e_d:0x}\nn:\t\t\t{self.n:0x}\nk:\t\t\t{self.k}\nx:\t\t\t{self.x:0x}\n"
+        prefix = "constant "
+        post_fix = ' : std_logic_vector (C_block_size-1 downto 0) := x"'
+
+        M_text = prefix + "M" + post_fix + f"{self.M:064x}" + '"\n'
+        E_text = prefix + "E" + post_fix + f"{self.key_e_d:064x}" + '"\n'
+        N_text = prefix + "N" + post_fix + f"{self.n:064x}" + '"\n'
+        X_text = prefix + "X" + post_fix + f"{self.x:064x}" + '"\n'
+
+        return M_text + E_text + N_text + X_text
 
 def write_test_data_to_file(test_data, filename: str = "test_data.txt"):
     with open(filename, "w") as f:

@@ -11,6 +11,10 @@ def MonPro(a_bar, b_bar, n, k):
         if u & 1:
             u = u + n
         u = u >> 1
+
+    if (u >= n):
+        u -= n
+
     return u
 
 def RSA_Montgomery(M, e, n, k):
@@ -19,10 +23,21 @@ def RSA_Montgomery(M, e, n, k):
     x_bar = r % n
     r_square = (r * r) % n
 
+    print(f"x_bar: \t{x_bar:064x}")
+    print(f"r_square: \t{r_square:064x}")
+    print()
+
     # Main algorithm
     M_bar = MonPro(M, r_square, n, k)
+    print(f"M_bar: {M_bar:064x}")
+    print()
+
     for i in range(k - 1, -1, -1):
+        print(f"x_bar: {x_bar:064x}")
+        print(f"n: {n:064x}")
         x_bar = MonPro(x_bar, x_bar, n, k)
+        print(f"x_bar: {x_bar:064x}")
+        print()
 
         if (e >> i) & 1:
             print(f"M_bar: {M_bar:064x}")
@@ -51,22 +66,31 @@ def ModularExponentiationVerify(base, exp, mod):
 
 k = 256
 
-p = number.getPrime(127)
-q = number.getPrime(127)
-n = (p * q)
-phi = (p - 1) * (q - 1)
 
-assert(n < (1 << k))
+M = 0x159e2d74f573b683df9ec95705d272ec39c4b3ef169905d8e6021e49672202f2
+E = 0x0000000000000000000000000000000000000000000000000000000000010001
+N = 0x346497a3b68a3cf1b2ca66c16517e45664434c12773973d8e5300dc7cb4c420f
+X = 0x1e8f6717b6aa034f553006cae30a601070e069996a2c387d75e6be430b6b4c63
 
-e = 65537
-d = inverse(e, phi)
+res = RSA_Montgomery(M, E, N, k)
+print(hex(res))
 
-M = 12312321321421
-
-x_mont_encrypt = RSA_Montgomery(M, e, n, k)
-x_verify_encrypt = ModularExponentiationVerify(M, e, n)
-assert(x_mont_encrypt == x_verify_encrypt)
-
-x_mont_decrypt = RSA_Montgomery(x_mont_encrypt, d, n, k)
-x_verify_decrypt = ModularExponentiationVerify(x_mont_encrypt, d, n)
-assert(x_mont_decrypt == x_verify_decrypt)
+# p = number.getPrime(127)
+# q = number.getPrime(127)
+# n = (p * q)
+# phi = (p - 1) * (q - 1)
+#
+# assert(n < (1 << k))
+#
+# e = 65537
+# d = inverse(e, phi)
+#
+# M = 12312321321421
+#
+# x_mont_encrypt = RSA_Montgomery(M, e, n, k)
+# x_verify_encrypt = ModularExponentiationVerify(M, e, n)
+# assert(x_mont_encrypt == x_verify_encrypt)
+#
+# x_mont_decrypt = RSA_Montgomery(x_mont_encrypt, d, n, k)
+# x_verify_decrypt = ModularExponentiationVerify(x_mont_encrypt, d, n)
+# assert(x_mont_decrypt == x_verify_decrypt)

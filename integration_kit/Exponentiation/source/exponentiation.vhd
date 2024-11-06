@@ -42,90 +42,54 @@ architecture expBehave of exponentiation is
     signal i : integer range 0 to 256 := 256;
 
     -- Shift register for key_e_d
-    signal r_key_e_d : STD_LOGIC_VECTOR (C_block_size downto 0);
+    signal r_key_e_d : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
 
     -- Data registers
-    signal x_bar : STD_LOGIC_VECTOR (C_block_size downto 0);
-    signal M_bar : STD_LOGIC_VECTOR (C_block_size downto 0);
+    signal x_bar : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
+    signal M_bar : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
     
-    signal x : STD_LOGIC_VECTOR (C_block_size downto 0);
+    signal x : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
 
     -- Save the r_square value
-    signal r_r_square : STD_LOGIC_VECTOR (C_block_size downto 0);
+    signal r_r_square : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
 
     -- MonPro signals
-    signal mon_pro_ready : STD_LOGIC; 
-    signal mon_pro_done  : STD_LOGIC;
-    signal mon_pro_start : STD_LOGIC;
+    signal mon_pro_ready    : STD_LOGIC := '0'; 
+    signal mon_pro_o_valid  : STD_LOGIC := '0';
+    signal mon_pro_start    : STD_LOGIC := '0';
 
     -- MonPro input data signals
-    signal mon_pro_A : STD_LOGIC_VECTOR (C_block_size downto 0);
-    signal mon_pro_B : STD_LOGIC_VECTOR (C_block_size downto 0);
-    signal mon_pro_key_n : STD_LOGIC_VECTOR (C_block_size downto 0);
+    signal mon_pro_A : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
+    signal mon_pro_B : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
+    signal mon_pro_key_n : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
 
     -- MonPro output data signals
-    signal mon_pro_u : STD_LOGIC_VECTOR (C_block_size downto 0);
-
-    -- MonPro Combinational signals (input and output from combinational computation block)
-    signal mon_pro_comb_A_in : STD_LOGIC_VECTOR (C_block_size downto 0);
-    signal mon_pro_comb_B_in : STD_LOGIC_VECTOR (C_block_size downto 0);
-    signal mon_pro_comb_N_in : STD_LOGIC_VECTOR (C_block_size downto 0);
-    signal mon_pro_comb_U_in : STD_LOGIC_VECTOR (C_block_size downto 0);
-    signal mon_pro_comb_U_out : STD_LOGIC_VECTOR (C_block_size downto 0);
-    signal mon_pro_comb_mux_x : STD_LOGIC;
-    signal mon_pro_comb_mux_y : STD_LOGIC;
-    signal mon_pro_comb_mux_z : STD_LOGIC;
-
+    signal mon_pro_u : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
 begin
 
-    u_mon_pro_fsm : entity work.monpro_fsm_v2(behavioral_v2)
+    u_mon_pro : entity work.monpro_sv(behavioral)
     generic map (
-        DATA_SIZE => C_block_size + 1
+        DATA_SIZE => C_block_size
     )
     port map (
         clk => clk,
-        rst => not reset_n,
+        srstn => reset_n,
 
         start => mon_pro_start,
         ready => mon_pro_ready,
-        valid => mon_pro_done,
+        o_valid => mon_pro_o_valid,
 
-        A_in => mon_pro_A,
-        B_in => mon_pro_B,
-        N_in => mon_pro_key_n,
-        result => mon_pro_u,
-
-        -- MonPro Comb signals
-        A_out => mon_pro_comb_A_in,
-        B_out => mon_pro_comb_B_in,
-        N_out => mon_pro_comb_N_in,
-        U_out => mon_pro_comb_U_in,
-        Unp1_in => mon_pro_comb_U_out,
-        x => mon_pro_comb_mux_x,
-        y => mon_pro_comb_mux_y,
-        z => mon_pro_comb_mux_z
+        i_A => mon_pro_A,
+        i_B => mon_pro_B,
+        i_N => mon_pro_key_n,
+        o_U => mon_pro_u
     );
 
-    u_mon_pro_comb: entity work.monpro_comb(behavioral)
-    generic map (
-        DATA_SIZE => C_block_size + 1
-    )
-    port map (
-        B => mon_pro_comb_B_in,
-        N => mon_pro_comb_N_in,
-        Un => mon_pro_comb_U_in,
-        Unp1 => mon_pro_comb_U_out,
-        n_b_mux => mon_pro_comb_mux_x,
-        bypass_mux => mon_pro_comb_mux_y,
-        srl_mux => mon_pro_comb_mux_z
-    );
-    
     -- State
     p_state_transition: process (clk) is begin
         if rising_edge(clk) then
             if reset_n = '0' then
                 current_state <= IDLE;
-                i <= 256;
             else
                 current_state <= next_state;
             end if;
@@ -133,7 +97,7 @@ begin
     end process p_state_transition;
 
     -- Next state logic
-    p_next_state_logic: process (all) is begin
+    p_next_state_logic: process (current_state, valid_in, mon_pro_o_valid, ready_out) is begin
         next_state <= current_state;
 
         case current_state is 
@@ -143,12 +107,12 @@ begin
                 end if;
 
             when COMPUTE_M_BAR => 
-                if mon_pro_done = '1' then
+                if mon_pro_o_valid = '1' then
                     next_state <= COMPUTING_X_BAR;
                 end if;
 
             when COMPUTING_X_BAR =>
-                if mon_pro_done = '1' then
+                if mon_pro_o_valid = '1' then
                     if r_key_e_d(C_block_size-1) = '1' then
                         next_state <= COMPUTING_EXPONENT;
                     else
@@ -162,7 +126,7 @@ begin
                 end if;
 
             when COMPUTING_EXPONENT => 
-                if mon_pro_done then
+                if mon_pro_o_valid = '1' then
                     -- i has been decremented now
                     if i = 0 then
                         next_state <= COMPUTE_X;
@@ -172,10 +136,12 @@ begin
                 end if;
 
             when COMPUTE_X =>
-                next_state <= DONE;
-
+                if mon_pro_o_valid = '1' then
+                    next_state <= DONE;
+                end if;
+                
             when DONE =>
-                if ready_out then
+                if ready_out = '1' then
                     next_state <= IDLE;
                 end if;
 
@@ -204,6 +170,8 @@ begin
 
                 -- Reset output signals
                 valid_out <= '0';
+                
+                x <= (others => '0');
 
             else
                 case current_state is 
@@ -214,19 +182,21 @@ begin
                         -- Signals
                         mon_pro_start <= '0';
                         valid_out <= '0';
+                        
+                        x <= (others => '0');
 
                         -- Data
                         if valid_in = '1' then
-                            M_bar <= '0' & message;       -- Assign start value for M, will be used to compute M_bar
-                            x_bar <= '0' & r;             -- Start value is r mod n
-                            r_r_square <= '0' & r_square; -- Save for later
-                            r_key_e_d  <= '0' & key_e_d;
+                            M_bar <= message;       -- Assign start value for M, will be used to compute M_bar
+                            x_bar <= r;             -- Start value is r mod n
+                            r_r_square <= r_square; -- Save for later
+                            r_key_e_d  <= key_e_d;
 
-                            mon_pro_key_n <= '0' & key_n; -- Wont change during RSA compute
+                            mon_pro_key_n <= key_n; -- Wont change during RSA compute
                         end if;
 
                     when COMPUTE_M_BAR =>
-                        if mon_pro_done = '1' then
+                        if mon_pro_o_valid = '1' then
                             M_bar <= mon_pro_u;
                             mon_pro_start <= '0';
                         elsif mon_pro_ready = '1' then
@@ -238,13 +208,13 @@ begin
                         end if;
         
                     when COMPUTING_X_BAR => 
-                        if mon_pro_done = '1' then
+                        if mon_pro_o_valid = '1' then
                             i <= i - 1;
                             x_bar <= mon_pro_u;
                             mon_pro_start <= '0';
 
                             -- Shift register for exponent
-                            r_key_e_d <= r_key_e_d(C_block_size - 1 downto 0) & '0';
+                            r_key_e_d <= r_key_e_d(C_block_size - 2 downto 0) & '0';
 
                         elsif mon_pro_ready = '1' then
                             mon_pro_A <= x_bar;
@@ -255,7 +225,7 @@ begin
                         end if;
 
                     when COMPUTING_EXPONENT => 
-                        if mon_pro_done = '1' then
+                        if mon_pro_o_valid = '1' then
                             x_bar <= mon_pro_u;
                             mon_pro_start <= '0';
                         elsif mon_pro_ready = '1' then
@@ -267,7 +237,7 @@ begin
                         end if;
 
                     when COMPUTE_X => 
-                        if mon_pro_done = '1' then
+                        if mon_pro_o_valid = '1' then
                             x <= mon_pro_u;
                             mon_pro_start <= '0';
                         elsif mon_pro_ready = '1' then
@@ -283,8 +253,9 @@ begin
                         end if;
 
                     when DONE => 
-                        valid_out <= '1';        
-                        msg_out <= x(C_block_size-1 downto 0);
+                        valid_out <= '1';
+                        mon_pro_start <= '0';     
+                        msg_out <= x;
 
                     when others =>
                         i <= 256;

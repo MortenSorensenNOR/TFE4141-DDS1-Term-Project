@@ -1,121 +1,101 @@
 ================================
-M:			5d4bb685424a817e35bebe8cba01b896bd15a8be0b798a63d4344069b8b40af5
-key_e_d:	10001
-n:			2e5f7417fd9c9471c4ee1077900d7e4051e4d3f682b95bc27f5d128e05df33b5
-k:			256
-x:			15d2417329976819e884398503672dc29d5d8fb72fbe024bc048c35a68c7dd8d
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"159e2d74f573b683df9ec95705d272ec39c4b3ef169905d8e6021e49672202f2"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"0000000000000000000000000000000000000000000000000000000000010001"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"346497a3b68a3cf1b2ca66c16517e45664434c12773973d8e5300dc7cb4c420f"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"1e8f6717b6aa034f553006cae30a601070e069996a2c387d75e6be430b6b4c63"
 ================================
-M:			15d2417329976819e884398503672dc29d5d8fb72fbe024bc048c35a68c7dd8d
-key_e_d:	727b342005fa887e55ad62f9c8a787052906573b5df27980e753390b14eea1
-n:			2e5f7417fd9c9471c4ee1077900d7e4051e4d3f682b95bc27f5d128e05df33b5
-k:			256
-x:			8cce554711589aabe29d9d99e6bc16194c00d10606d2ded57a1b4dacf5a38b
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"1e8f6717b6aa034f553006cae30a601070e069996a2c387d75e6be430b6b4c63"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"30699b2d6de942f35bf0670ee16938563df4a37359ca9d4365f5826b93095781"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"346497a3b68a3cf1b2ca66c16517e45664434c12773973d8e5300dc7cb4c420f"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"159e2d74f573b683df9ec95705d272ec39c4b3ef169905d8e6021e49672202f2"
 ================================
-M:			12dc08c85c71a5f5a9afe1e4a8f6bce3ede1f65167529026fffddb0808af2851
-key_e_d:	10001
-n:			1b3b7081e6a65f369119f72f86837616455d40f3fac7c60bda1766dd2227f2d9
-k:			256
-x:			aa95e03a05f8fba695b17cf2213fa1219059011944c3f5303e5e92d618f691d
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"2f334761f2c3d9e221ee73092660a62e0468283da792bbc55e73faa57fd9d788"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"0000000000000000000000000000000000000000000000000000000000010001"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"192e882c9d1e2696550147cb85865a87783d6a8377dce5cc37f5f6ad11b5c8cb"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"05ba173b2158ba09d9a6450e7d375c9df242cdc8f7b118c9099877eb120b2fb9"
 ================================
-M:			aa95e03a05f8fba695b17cf2213fa1219059011944c3f5303e5e92d618f691d
-key_e_d:	1362c6fed271518a88d5113095f373d6820d3c841f37bab7d29d9f8cdd854901
-n:			1b3b7081e6a65f369119f72f86837616455d40f3fac7c60bda1766dd2227f2d9
-k:			256
-x:			12dc08c85c71a5f5a9afe1e4a8f6bce3ede1f65167529026fffddb0808af2851
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"05ba173b2158ba09d9a6450e7d375c9df242cdc8f7b118c9099877eb120b2fb9"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"08ef5fd624b1cc134f7a32d55e3d7be598662642a636598781931f32a90860d1"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"192e882c9d1e2696550147cb85865a87783d6a8377dce5cc37f5f6ad11b5c8cb"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"1604bf3555a5b34bcced2b3da0da4ba68c2abdba2fb5d5f9267e03f86e240ebd"
 ================================
-M:			140a589d5d9c457d00e72939dbc044cbd085f6b81a03449a0d854d7e7447fd5f
-key_e_d:	10001
-n:			231c4b470c4ad50bd9f612dec2533f1f9f1e6a45666c736741b531862127c8e7
-k:			256
-x:			158b610eadf6662468b9b738c8742247e353c5a2d7abbd26928851c95c079e16
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"135766edd5df4e561dd0b0d753f946130b1b9d646a395f0ef6965a1658b3cbce"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"0000000000000000000000000000000000000000000000000000000000010001"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"250f9881dabb1c1c2e915ad3f549b5a9959c7e5e3053339942acb6120765ae8f"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"131d1117c5dca6b313a65c8daa457454fe768291cd3889d88c2c7461b48d221c"
 ================================
-M:			158b610eadf6662468b9b738c8742247e353c5a2d7abbd26928851c95c079e16
-key_e_d:	175860d544df1cf95c5bba0053c5765ad49ad0a281a2662dbee4caccc81ab701
-n:			231c4b470c4ad50bd9f612dec2533f1f9f1e6a45666c736741b531862127c8e7
-k:			256
-x:			140a589d5d9c457d00e72939dbc044cbd085f6b81a03449a0d854d7e7447fd5f
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"131d1117c5dca6b313a65c8daa457454fe768291cd3889d88c2c7461b48d221c"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"02d2ad4b36de09c61bc5f6a52e89eecc6d4165769beebfed60f6d45a48b6e401"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"250f9881dabb1c1c2e915ad3f549b5a9959c7e5e3053339942acb6120765ae8f"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"135766edd5df4e561dd0b0d753f946130b1b9d646a395f0ef6965a1658b3cbce"
 ================================
-M:			187a26f750549eb47c55d08d5dd26241e6b3ebf34f96919e37751a3c0da387ec
-key_e_d:	10001
-n:			1155f2fc2f046d1ae2b11e1e4c5e460acb90677ea18bd860502fa7464a20c44f
-k:			256
-x:			fcfdd351fecc4523ba36067149cc3ecaaba039cad01494b81a4f859f86b61cd
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"7c62e84fb9bb3a664ca52c5e50d055099f5fb4cacb77a13ad8202d93be72f10b"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"0000000000000000000000000000000000000000000000000000000000010001"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"19e5037b0f02fe07f76ccf48ca40923cb6a64c0351eaaadf061e765271741093"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"116911bc1b4a700b2cb74d1491bf04f49c3d8c35d8aad35eca11a4c114287c84"
 ================================
-M:			fcfdd351fecc4523ba36067149cc3ecaaba039cad01494b81a4f859f86b61cd
-key_e_d:	107c1ac39432314e0fa33d70b24e336c31d22d69a63340749ea874ece615f79
-n:			1155f2fc2f046d1ae2b11e1e4c5e460acb90677ea18bd860502fa7464a20c44f
-k:			256
-x:			72433fb2150319999a4b26f11741c371b238474ae0ab93de74572f5c382c39d
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"116911bc1b4a700b2cb74d1491bf04f49c3d8c35d8aad35eca11a4c114287c84"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"061ee6e2b89aa9773299eaa936fd6a537e5dad25cdd5ddbdf05b2c1fd1863789"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"19e5037b0f02fe07f76ccf48ca40923cb6a64c0351eaaadf061e765271741093"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"14ceda637daf42466ef1ef3b27ce0c16c4c684bd83ccf5bebfa65449f8a2aebf"
 ================================
-M:			7e4bb5df6d04e19948960202047b789f9bb07009cc5bf042cc8fa69b4db257f
-key_e_d:	10001
-n:			2170524ef6c2d6b630815dae940298b62717caba125299b6e941dda9fcfd66cf
-k:			256
-x:			38072e8d5ef65ac29e02acee08610103ef90f86fd0843b3eba245dd3b25a84e
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"558b5bfff72ea524c99303455e7c8a1968fdc450e3227fd252b8e898928ea00b"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"0000000000000000000000000000000000000000000000000000000000010001"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"238c274572a7cb127efff3b18347e7c8067b5c4f01f57c38a4dbc9d1d12d5885"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"20352a99b97bd0123830e75655fcd0cd3b31787dd620880766470403d589c37f"
 ================================
-M:			38072e8d5ef65ac29e02acee08610103ef90f86fd0843b3eba245dd3b25a84e
-key_e_d:	16498802ab83e79a1d304c618cb342573f71a73070bc54287782ecc4b88de6a1
-n:			2170524ef6c2d6b630815dae940298b62717caba125299b6e941dda9fcfd66cf
-k:			256
-x:			7e4bb5df6d04e19948960202047b789f9bb07009cc5bf042cc8fa69b4db257f
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"20352a99b97bd0123830e75655fcd0cd3b31787dd620880766470403d589c37f"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"1fb12bae09fbb8dc23a8145f15d93cb6728e353de73db7ea19d38a263fb77ffd"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"238c274572a7cb127efff3b18347e7c8067b5c4f01f57c38a4dbc9d1d12d5885"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"0e730d7511df0effcb931be257ecba895c070bb2df378761090154f4f033ef01"
 ================================
-M:			611b702353b970d5c793c92beeebb9adb289c8a22c79cd1b2bda038c776b5e25
-key_e_d:	10001
-n:			132ece34700424ee537a570235ee2395bce0385c42e1554925c766fd57681a1d
-k:			256
-x:			ad64ae06e2bc70511244416ed5b09301b09bcbfb0788461f07a60d3293a5583
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"058142da13d971f15ba1482bba5f25806aae83f4239708df778cee1a98f2dc38"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"0000000000000000000000000000000000000000000000000000000000010001"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"27b6553929b8c9d9eea9f4ce28c6b0506dacd04c385a88145fe62038cca7442d"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"0b1e7a40e975dcfd345e2c2f784f542ec8cb7060cdd76cfbd6b005ff3f372c1b"
 ================================
-M:			ad64ae06e2bc70511244416ed5b09301b09bcbfb0788461f07a60d3293a5583
-key_e_d:	86d82e8e4e1dd3bdbef1ef4f8aeb4716258b79c53fa9a2f5876eacdbfd12d9d
-n:			132ece34700424ee537a570235ee2395bce0385c42e1554925c766fd57681a1d
-k:			256
-x:			131691d23a4b82e26301620e14507c10228aed4de1322ad6ef50099c262db94
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"0b1e7a40e975dcfd345e2c2f784f542ec8cb7060cdd76cfbd6b005ff3f372c1b"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"122d3dd2dd4aec7128f177d0c90f307231e9e7a40d628284167b55ccfdd585a1"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"27b6553929b8c9d9eea9f4ce28c6b0506dacd04c385a88145fe62038cca7442d"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"058142da13d971f15ba1482bba5f25806aae83f4239708df778cee1a98f2dc38"
 ================================
-M:			59de66f392feb8bb0a4a33d6b1a5bc08d978841314d0e71fd8fa7648438c1b9a
-key_e_d:	10001
-n:			2844d5ce18e2976b43cd7afe9f421b94848546bb4b5b412df92e920af3f4fa6d
-k:			256
-x:			b1eba934fb133f7f32ec0c2e655be977ffedb6aeb57efacd68dfcb3d7a04a68
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"7c7f9eaaa74787fcf3fa44a8287c77931e3121f97cd4d2ad0d29fd90a9419222"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"0000000000000000000000000000000000000000000000000000000000010001"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"238f178d9b209ce88584c84a13fffd06432ed45719891595e4d9e46dd8160121"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"08ae1f5f4d7f8736c59a024d8c8750f064d39d9e8805bdc2ec0d738d897ac9bf"
 ================================
-M:			b1eba934fb133f7f32ec0c2e655be977ffedb6aeb57efacd68dfcb3d7a04a68
-key_e_d:	b1dfddcd937ed4fbab746c676d73c5fcad7e46d329518ac95ffdfff08a24e21
-n:			2844d5ce18e2976b43cd7afe9f421b94848546bb4b5b412df92e920af3f4fa6d
-k:			256
-x:			954bb57613989e482af3dd9732184dfd06df69c7e1a64c3e69d52325ba226c0
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"08ae1f5f4d7f8736c59a024d8c8750f064d39d9e8805bdc2ec0d738d897ac9bf"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"1c05e8c9f03703713bc829103832c57453897be530c05ad3623f8553ff55b401"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"238f178d9b209ce88584c84a13fffd06432ed45719891595e4d9e46dd8160121"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"11d25801d5e5b143636bebc9ec7c808054a4a4f4303991eb5e9c504720ff8ebf"
 ================================
-M:			1de63982f3c8f18b65cedfb58bb211d49af291258041e6c2fa1e68c4e581bc12
-key_e_d:	10001
-n:			23fd3107f131c3f303c1957aa631522677129ee95d2b1a96ba6e2b8bdc873c55
-k:			256
-x:			1539edc6c49012dbeb5d6af70a1e36b469cb54b92e0dd8351701c1a9d90d497c
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"776aefc48c1c356214a3947e2ff71bd3de9a8c822de06b726e3cfb61383d9819"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"0000000000000000000000000000000000000000000000000000000000010001"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"26d6505c0ca93ea2ca9c6518d6f2e5e80371c739a2c83409c5c509b67db23007"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"093af588caa2e166f44f7c9a77458025db41dfd559a1b7070f07f109251a3d2a"
 ================================
-M:			1539edc6c49012dbeb5d6af70a1e36b469cb54b92e0dd8351701c1a9d90d497c
-key_e_d:	48295636e699329e03da152f682d5cd9daa10e48f67bd8f7ee46abcee6eefa1
-n:			23fd3107f131c3f303c1957aa631522677129ee95d2b1a96ba6e2b8bdc873c55
-k:			256
-x:			1de63982f3c8f18b65cedfb58bb211d49af291258041e6c2fa1e68c4e581bc12
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"093af588caa2e166f44f7c9a77458025db41dfd559a1b7070f07f109251a3d2a"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"011969d6e128dd34006622da6c231decc89a11fc8754b38ac10be23f36609bc9"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"26d6505c0ca93ea2ca9c6518d6f2e5e80371c739a2c83409c5c509b67db23007"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"02e7feb066207979b4ce6533ab1e6a1bd44536d54587cf551cedde3dbf270804"
 ================================
-M:			2e48ee36e223a06d99eca122e6fa2c3878c5bb5af8059008a97c61be4190a1a5
-key_e_d:	10001
-n:			27a29722daddc1b819629209a2731fd3fd358c48f601bd3a897ea8ad37140355
-k:			256
-x:			1fd25a4487f31ff150be8f1335bdf6d9da8f2ea5dd2a06a0973d93f0d1de25f5
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"11eaaff90f43e2d6ac8fb7ae30a9fb7ff14bef0d85eba341976959238844971e"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"0000000000000000000000000000000000000000000000000000000000010001"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"1ce16a666c109e6ea8972b4d90cc7cd17611d3fed8e74831d131fb391f68798f"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"0b2dc253f81aa70392ac311923acd1a0e75c3374d18d5e96c65b21fe43986393"
 ================================
-M:			1fd25a4487f31ff150be8f1335bdf6d9da8f2ea5dd2a06a0973d93f0d1de25f5
-key_e_d:	6333d094acb9dde3aba5cb5fd1f9d3ee0acbbb86ea548cb7aaaa9f75e42cb11
-n:			27a29722daddc1b819629209a2731fd3fd358c48f601bd3a897ea8ad37140355
-k:			256
-x:			6a657140745deb5808a0f1944870c647b902f120203d2ce1ffdb9110a7c9e50
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"0b2dc253f81aa70392ac311923acd1a0e75c3374d18d5e96c65b21fe43986393"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"181b6d465b742fdb6cecea9f8f7bb1c0505dac6851d339a216c87188ebfcabd1"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"1ce16a666c109e6ea8972b4d90cc7cd17611d3fed8e74831d131fb391f68798f"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"11eaaff90f43e2d6ac8fb7ae30a9fb7ff14bef0d85eba341976959238844971e"
 ================================
-M:			11f72c7e48c84589b72e42ce07df69022d59cb5922b67cbedb9a3a5b2ecb268
-key_e_d:	10001
-n:			2a90b564fbce66f1d9a5ae4f65d3be834b9a7cea7b1f785e9b88f90a2a8d5d23
-k:			256
-x:			21d2e57195d83f7bc80b6431fc90cf42a4fa159d4fe74c9420634c1f7a59e528
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"1389fea1feababd5a275376c470f0b8908b3bc16bd704ddd5d58190dcb96e19c"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"0000000000000000000000000000000000000000000000000000000000010001"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"1779bc0919dadeb4af37eb51444b72140b3ddb26abc3648edb280ae467d1835d"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"1716f1cf4d0f89f7a24cce8d20404ee873e4e231fb77026b9e62677e2f5cffbf"
 ================================
-M:			21d2e57195d83f7bc80b6431fc90cf42a4fa159d4fe74c9420634c1f7a59e528
-key_e_d:	10d555c77005fa945edcb508d55e5e133fcfe908b59a1e1bf08e6d997f35c691
-n:			2a90b564fbce66f1d9a5ae4f65d3be834b9a7cea7b1f785e9b88f90a2a8d5d23
-k:			256
-x:			11f72c7e48c84589b72e42ce07df69022d59cb5922b67cbedb9a3a5b2ecb268
+constant M : std_logic_vector (C_block_size-1 downto 0) := x"1716f1cf4d0f89f7a24cce8d20404ee873e4e231fb77026b9e62677e2f5cffbf"
+constant E : std_logic_vector (C_block_size-1 downto 0) := x"12cee29b3c0ec25d6b00d7550ded90610730bf6e7185a89e76e39e743d444c61"
+constant N : std_logic_vector (C_block_size-1 downto 0) := x"1779bc0919dadeb4af37eb51444b72140b3ddb26abc3648edb280ae467d1835d"
+constant X : std_logic_vector (C_block_size-1 downto 0) := x"1389fea1feababd5a275376c470f0b8908b3bc16bd704ddd5d58190dcb96e19c"
 ================================
