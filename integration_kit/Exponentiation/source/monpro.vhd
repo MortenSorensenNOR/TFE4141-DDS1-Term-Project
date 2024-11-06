@@ -2,7 +2,7 @@ library ieee ;
     use ieee.std_logic_1164.all ;
     use ieee.numeric_std.all ;
 
-entity monpro_sv is
+entity monpro is
     generic (
         DATA_SIZE : natural := 256
     ) ;
@@ -19,9 +19,9 @@ entity monpro_sv is
         i_N : in std_logic_vector (DATA_SIZE-1 downto 0);
         o_U : out std_logic_vector (DATA_SIZE-1 downto 0)
     ) ;
-end monpro_sv ; 
+end monpro ; 
 
-architecture behavioral of monpro_sv is
+architecture behavioral of monpro is
     -- Iteration counter
     signal cnt_i : integer range 0 to DATA_SIZE;
 

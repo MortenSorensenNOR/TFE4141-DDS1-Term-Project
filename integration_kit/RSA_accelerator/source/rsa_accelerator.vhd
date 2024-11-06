@@ -233,7 +233,6 @@ u_rsa_core : entity work.rsa_core
 
         r                      => r,
         r_square               => r_square
-
 	);
 
 end rtl;

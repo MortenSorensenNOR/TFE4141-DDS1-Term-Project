@@ -65,6 +65,9 @@ architecture struct of rsa_accelerator_tb is
 	signal key_n           : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 	signal rsa_status      : std_logic_vector(31 downto 0);
 
+	signal r            : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+	signal r_square     : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+
 	-----------------------------------------------------------------------------
 	-- Testcases
 	-- The folder with the tests (rsa_tests), must be placed in the working
@@ -200,7 +203,9 @@ architecture struct of rsa_accelerator_tb is
 	-----------------------------------------------------------------------------
 	procedure read_keys_and_command(
 		signal kn  : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
-		signal ked : out std_logic_vector(C_BLOCK_SIZE-1 downto 0)
+		signal ked : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+        signal r_val        : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+        signal r_sqr_val    : out std_logic_vector(C_BLOCK_SIZE-1 downto 0)
 	)is
 		variable line_from_file: line;
 		variable s1            : string(1 downto 1);
@@ -209,6 +214,8 @@ architecture struct of rsa_accelerator_tb is
 		variable e             : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 		variable d             : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 		variable n             : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+        variable r             : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+        variable r_square      : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 	begin
 		-- Read comment
 		readline(tc_inp, line_from_file);
@@ -216,18 +223,35 @@ architecture struct of rsa_accelerator_tb is
 		readline(tc_inp, line_from_file);
 		read(line_from_file, s64);
 		n := str_to_stdvec(s64);
+
 		-- Read comment
 		readline(tc_inp, line_from_file);
 		-- Read KEY E
 		readline(tc_inp, line_from_file);
 		read(line_from_file, s64);
 		e := str_to_stdvec(s64);
+
 		-- Read comment
 		readline(tc_inp, line_from_file);
 		-- Read KEY D
 		readline(tc_inp, line_from_file);
 		read(line_from_file, s64);
 		d := str_to_stdvec(s64);
+
+		-- Read comment
+		readline(tc_inp, line_from_file);
+        -- Read R
+        readline(tc_inp, line_from_file);
+        read(line_from_file, s64);
+        r_val := str_to_stdvec(s64);
+
+		-- Read comment
+		readline(tc_inp, line_from_file);
+        -- Read R
+        readline(tc_inp, line_from_file);
+        read(line_from_file, s64);
+        r_sqr_val := str_to_stdvec(s64);
+
 		-- Read comment
 		readline(tc_inp, line_from_file);
 		-- Command (Encrypt/Decrypt)
@@ -236,6 +260,7 @@ architecture struct of rsa_accelerator_tb is
 		readline(tc_inp, line_from_file);
 		read(line_from_file, s1);
 		command := str_to_stdvec(s1)(0);
+
 		-- Read empty line
 		readline(tc_inp, line_from_file);
 
@@ -247,6 +272,9 @@ architecture struct of rsa_accelerator_tb is
 			ked <= d;
 		end if;
 		kn <= n;
+
+        r <= r_val;
+        r_square <= r_sqr_val;
 	end read_keys_and_command;
 
 	-----------------------------------------------------------------------------
@@ -338,6 +366,8 @@ begin
 			tc_ctrl_state          <= e_TC_START_TC;
 			key_n                  <= (others => '0');
 			key_e_d                <= (others => '0');
+            r                      <= (others => '0');
+            r_square               <= (others => '0');
 			test_case_id           <= 0;
 			start_tc               <= '0';
 
@@ -358,7 +388,12 @@ begin
 					tc_ctrl_state <= e_TC_RUN_TC;
 					open_tc_inp(test_case_id);
 					open_tc_otp(test_case_id);
-					read_keys_and_command(key_n, key_e_d);
+					read_keys_and_command(key_n, key_e_d, r, r_square);
+
+                    -- Compute R mod N and R**2 mod N from read keys
+                    r                      <= (others => '0');
+                    r_square               <= (others => '0');
+
 					start_tc      <= '1';
 
 				-- Run the testcase
@@ -603,6 +638,8 @@ u_rsa_core : entity work.rsa_core
 		key_n                  => key_n,
 		rsa_status             => rsa_status
 
+        r                      => r,
+        r_square               => r_square
 	);
 
 
