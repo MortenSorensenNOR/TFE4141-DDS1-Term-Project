@@ -23,7 +23,7 @@ end monpro_sv ;
 
 architecture behavioral of monpro_sv is
     -- Iteration counter
-    signal cnt_i : integer range 0 to DATA_SIZE;
+    signal cnt_i : integer range 0 to DATA_SIZE+2;
 
     -- Data registers
     signal r_A : std_logic_vector (DATA_SIZE-1 downto 0);

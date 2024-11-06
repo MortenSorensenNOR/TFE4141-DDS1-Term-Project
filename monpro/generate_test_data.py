@@ -20,14 +20,22 @@ class MonProTestData:
         if self.higher:
             self.U = self.U - self.N
 
-        prefix = "parameter logic unsigned [DATAWIDTH-1:0] "
-        A_txt = prefix + f"A = 256'h{self.A:0x}" + ",\n"
-        B_txt = prefix + f"B = 256'h{self.B:0x}" + ",\n"
-        N_txt = prefix + f"N = 256'h{self.N:0x}" + ",\n"
-        U_txt = prefix + f"U_EXPECTED = 256'h{self.U:0x}" + "\n"
+        # VERBOSE FILE OUTPUT
+        # prefix = "parameter logic unsigned [DATAWIDTH-1:0] "
+        # A_txt = prefix + f"A = 256'h{self.A:0x}" + ",\n"
+        # B_txt = prefix + f"B = 256'h{self.B:0x}" + ",\n"
+        # N_txt = prefix + f"N = 256'h{self.N:0x}" + ",\n"
+        # U_txt = prefix + f"U_EXPECTED = 256'h{self.U:0x}" + "\n"
 
-        if self.higher:
-            return "HIGHER\n" + A_txt + B_txt + N_txt + U_txt
+        # RAW FILE OUTPUT
+        A_txt = f"{self.A:064x} "
+        B_txt = f"{self.B:064x} "
+        N_txt = f"{self.N:064x} "
+        U_txt = f"{self.U:064x}\n"
+
+
+        # if self.higher:
+        #     return "HIGHER\n" + A_txt + B_txt + N_txt + U_txt
         return A_txt + B_txt + N_txt + U_txt
 
 class MonExpTestData:
@@ -51,10 +59,10 @@ class MonExpTestData:
 
 def write_test_data_to_file(test_data, filename: str = "test_data.txt"):
     with open(filename, "w") as f:
-        f.write("================================\n")
+        #f.write("================================\n")
         for data in test_data:
             f.write(data.toString()) 
-            f.write("================================\n")
+            #f.write("================================\n")
 
 mon_pro_test_data: list[MonProTestData] = []
 mon_exp_test_data: list[MonExpTestData] = []
@@ -118,7 +126,7 @@ for i in range(10):
     mon_exp_test_data.append(MonExpTestData(x_mont_encrypt, d, n, k, x_mont_decrypt))
 
 print(f"MonPro Test Data length: {len(mon_pro_test_data)}")
-write_test_data_to_file(mon_pro_test_data, "mon_pro_test_data.txt")
+write_test_data_to_file(mon_pro_test_data, "./raw_mon_pro_test_data.txt")
 
 print(f"MonExp Test Data length: {len(mon_exp_test_data)}")
 write_test_data_to_file(mon_exp_test_data, "mon_exp_test_data.txt")
