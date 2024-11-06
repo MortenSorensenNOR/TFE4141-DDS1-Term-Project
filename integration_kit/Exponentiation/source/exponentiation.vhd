@@ -256,7 +256,11 @@ begin
                         end if;
 
                     when DONE => 
-                        valid_out <= '1';
+                        if (ready_out) then
+                            valid_out <= '1';
+                        else 
+                            valid_out <= '0';
+                        end if;
                         mon_pro_start <= '0';     
                         msg_out <= x;
 

@@ -52,7 +52,7 @@ begin
     ---------------------------------------
     -- DUT : Monpro_sv
     ---------------------------------------
-    DUT : entity work.monpro_sv(behavioral)
+    DUT : entity work.monpro(behavioral)
     generic map (
         DATA_SIZE => DATA_SIZE
     )
