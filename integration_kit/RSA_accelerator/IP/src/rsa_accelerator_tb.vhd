@@ -243,14 +243,14 @@ architecture struct of rsa_accelerator_tb is
         -- Read R
         readline(tc_inp, line_from_file);
         read(line_from_file, s64);
-        r_val := str_to_stdvec(s64);
+        r := str_to_stdvec(s64);
 
 		-- Read comment
 		readline(tc_inp, line_from_file);
         -- Read R
         readline(tc_inp, line_from_file);
         read(line_from_file, s64);
-        r_sqr_val := str_to_stdvec(s64);
+        r_square := str_to_stdvec(s64);
 
 		-- Read comment
 		readline(tc_inp, line_from_file);
@@ -273,8 +273,8 @@ architecture struct of rsa_accelerator_tb is
 		end if;
 		kn <= n;
 
-        r <= r_val;
-        r_square <= r_sqr_val;
+        r_val <= r;
+        r_sqr_val <= r_square;
 	end read_keys_and_command;
 
 	-----------------------------------------------------------------------------
@@ -389,10 +389,6 @@ begin
 					open_tc_inp(test_case_id);
 					open_tc_otp(test_case_id);
 					read_keys_and_command(key_n, key_e_d, r, r_square);
-
-                    -- Compute R mod N and R**2 mod N from read keys
-                    r                      <= (others => '0');
-                    r_square               <= (others => '0');
 
 					start_tc      <= '1';
 
@@ -636,7 +632,7 @@ u_rsa_core : entity work.rsa_core
 		-----------------------------------------------------------------------------
 		key_e_d                => key_e_d,
 		key_n                  => key_n,
-		rsa_status             => rsa_status
+		rsa_status             => rsa_status,
 
         r                      => r,
         r_square               => r_square

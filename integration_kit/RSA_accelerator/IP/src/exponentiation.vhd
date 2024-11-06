@@ -99,11 +99,14 @@ begin
     -- Next state logic
     p_next_state_logic: process (current_state, valid_in, mon_pro_o_valid, ready_out) is begin
         next_state <= current_state;
+        ready_in <= '0';
 
         case current_state is 
             when IDLE => 
                 if valid_in = '1' then
                     next_state <= COMPUTE_M_BAR;
+                else
+                    ready_in <= '1';
                 end if;
 
             when COMPUTE_M_BAR => 
@@ -266,8 +269,6 @@ begin
         end if;
     end process p_signals;
 
-    -- Assign output signals
-    ready_in <= '1' when (current_state = IDLE) else '0';
 
 end expBehave;
 

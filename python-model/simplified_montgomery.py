@@ -5,8 +5,15 @@ from Crypto.Util import number
 from Crypto.Util.number import inverse
 
 def MonPro(a_bar, b_bar, n, k, debug = False):
+    if debug:
+        print()
+        print("Monpro:")
+
     u = 0
     for i in range(k):
+        if debug:
+            print(f"I: {i+1}:")
+
         odd = (u&1) ^ ((b_bar&1) and ((a_bar >> i)&1))
         ai = ((a_bar >> i)&1)
         
@@ -21,6 +28,8 @@ def MonPro(a_bar, b_bar, n, k, debug = False):
                 print("Case 4")
 
         u = u + ((a_bar >> i) & 1) * b_bar
+        if debug:
+            print(f"u: {u:065x}")
         if u & 1:
             u = u + n
         u = u >> 1

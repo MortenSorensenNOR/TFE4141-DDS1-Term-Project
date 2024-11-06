@@ -13,10 +13,10 @@ architecture testbench of tb_monpro_sv is
     constant VALID_TIMEOUT : time := 1024*PERIOD;
     constant DATA_SIZE : integer := 256;
     ------------------- TEST VECTORS -------------------
-    constant A_VAL : std_logic_vector (DATA_SIZE-1 downto 0) :=  x"984586d263d242096e6cdeff865297a0076eba43b6e1d855720f71e05ce078f7";
-    constant B_VAL : std_logic_vector (DATA_SIZE-1 downto 0) :=  x"984586d263d242096e6cdeff865297a0076eba43b6e1d855720f71e05ce078f7";
+    constant A_VAL : std_logic_vector (DATA_SIZE-1 downto 0) :=  x"984587126bda42096eecfeff865297a0886eba4bb6f1d855720f71e85ce078f7";
+    constant B_VAL : std_logic_vector (DATA_SIZE-1 downto 0) :=  x"984587126bda42096eecfeff865297a0886eba4bb6f1d855720f71e85ce078f7";
     constant N_VAL : std_logic_vector (DATA_SIZE-1 downto 0) :=  x"99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d";
-    constant U_VAL : std_logic_vector (DATA_SIZE-1 downto 0) :=  x"01362a24b630a8e265b65d361fb91a90e5a2dc8b25bb2ccc2afc1d440adedd68";
+    constant U_VAL : std_logic_vector (DATA_SIZE-1 downto 0) :=  x"1c5988d04524f1cd5aa07d9a6d4f7a9e17bed3d6a9f68fdb5acf37e91b1a421e";
     -----------------------------------------------------
 
     signal clk : std_logic := '0';

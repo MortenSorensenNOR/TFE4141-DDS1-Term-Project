@@ -40,8 +40,8 @@ architecture behavioral of monpro is
 
     -- Combinational
     signal adder_input : std_logic_vector (DATA_SIZE downto 0);
-    signal adder_result : std_logic_vector (DATA_SIZE downto 0);
-    signal adder_bypass_result : std_logic_vector (DATA_SIZE downto 0);
+    signal adder_result : std_logic_vector (DATA_SIZE+1 downto 0);
+    signal adder_bypass_result : std_logic_vector (DATA_SIZE+1 downto 0);
     signal monpro_comb_result : std_logic_vector (DATA_SIZE downto 0);
 
     signal alu_sub_mode, adder_input_mux_select, adder_bypass_mux_select, adder_result_shift_mux_select : std_logic;
@@ -85,16 +85,16 @@ begin
         -- Adder
         -------------------------------------
         if alu_sub_mode = '1' then
-            adder_result <= std_logic_vector(unsigned(U_reg) - unsigned(adder_input));
+            adder_result <= std_logic_vector(unsigned('0' & U_reg) - unsigned('0' & adder_input));
         else
-            adder_result <= std_logic_vector(unsigned(U_reg) + unsigned(adder_input));
+            adder_result <= std_logic_vector(unsigned('0' & U_reg) + unsigned('0' & adder_input));
         end if;
 
         -------------------------------------
         -- BYPASS MUX
         -------------------------------------
         if adder_bypass_mux_select = '1' then
-            adder_bypass_result <= U_reg;
+            adder_bypass_result <= '0' & U_reg;
         else
             adder_bypass_result <= adder_result;
         end if;
@@ -103,9 +103,9 @@ begin
         -- SHIFT REGISTER MUX
         -------------------------------------
         if adder_result_shift_mux_select = '1' then
-            monpro_comb_result <= adder_bypass_result;
+            monpro_comb_result <= adder_bypass_result(DATA_SIZE downto 0);
         else
-            monpro_comb_result <= '0' & adder_bypass_result(DATA_SIZE downto 1);
+            monpro_comb_result <= adder_bypass_result(DATA_SIZE+1 downto 1);
         end if;
     end process ; -- MONPRO_COMB
 
