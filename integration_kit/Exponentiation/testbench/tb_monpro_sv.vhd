@@ -13,9 +13,9 @@ architecture testbench of tb_monpro_sv is
     constant VALID_TIMEOUT : time := 1024*PERIOD;
     constant DATA_SIZE : integer := 256;
     ------------------- TEST VECTORS -------------------
-    constant A_VAL : std_logic_vector (DATA_SIZE-1 downto 0) :=  x"1f94373be50b1cc0ced44eebde66dd7acb02d59c51941d2497184c45aab39f5f";
-    constant B_VAL : std_logic_vector (DATA_SIZE-1 downto 0) :=  x"1f94373be50b1cc0ced44eebde66dd7acb02d59c51941d2497184c45aab39f5f";
-    constant N_VAL : std_logic_vector (DATA_SIZE-1 downto 0) :=  x"2e5f7417fd9c9471c4ee1077900d7e4051e4d3f682b95bc27f5d128e05df33b5";
+    constant A_VAL : std_logic_vector (DATA_SIZE-1 downto 0) :=  x"984586d263d242096e6cdeff865297a0076eba43b6e1d855720f71e05ce078f7";
+    constant B_VAL : std_logic_vector (DATA_SIZE-1 downto 0) :=  x"984586d263d242096e6cdeff865297a0076eba43b6e1d855720f71e05ce078f7";
+    constant N_VAL : std_logic_vector (DATA_SIZE-1 downto 0) :=  x"99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d";
     constant U_VAL : std_logic_vector (DATA_SIZE-1 downto 0) :=  x"01362a24b630a8e265b65d361fb91a90e5a2dc8b25bb2ccc2afc1d440adedd68";
     -----------------------------------------------------
 
@@ -34,7 +34,7 @@ begin
     ---------------------------------------
     -- DUT : Monpro_sv
     ---------------------------------------
-    DUT : entity work.monpro_sv(behavioral)
+    DUT : entity work.monpro(behavioral)
     generic map (
         DATA_SIZE => DATA_SIZE
     )

@@ -4,17 +4,36 @@ import random
 from Crypto.Util import number
 from Crypto.Util.number import inverse
 
-def MonPro(a_bar, b_bar, n, k):
+def MonPro(a_bar, b_bar, n, k, debug = False):
     u = 0
     for i in range(k):
+        odd = (u&1) ^ ((b_bar&1) and ((a_bar >> i)&1))
+        ai = ((a_bar >> i)&1)
+        
+        if debug:
+            if (ai and odd):
+                print("Case 1")
+            elif (ai and not odd):
+                print("Case 2")
+            elif (not ai and odd):
+                print("Case 3")
+            else:
+                print("Case 4")
+
         u = u + ((a_bar >> i) & 1) * b_bar
         if u & 1:
             u = u + n
         u = u >> 1
 
+        if debug:
+            print(f"Un+1 : {u:064x}")
+            print("")
+
     if (u >= n):
         u -= n
 
+    if debug:
+        print(f"U = {u:064x}")
     return u
 
 def RSA_Montgomery(M, e, n, k):
@@ -33,9 +52,10 @@ def RSA_Montgomery(M, e, n, k):
     print()
 
     for i in range(k - 1, -1, -1):
+        print(f"I: {i}")
         print(f"x_bar: {x_bar:064x}")
         print(f"n: {n:064x}")
-        x_bar = MonPro(x_bar, x_bar, n, k)
+        x_bar = MonPro(x_bar, x_bar, n, k, i == 9)
         print(f"x_bar: {x_bar:064x}")
         print()
 
@@ -67,10 +87,10 @@ def ModularExponentiationVerify(base, exp, mod):
 k = 256
 
 
-M = 0x159e2d74f573b683df9ec95705d272ec39c4b3ef169905d8e6021e49672202f2
+M = 0x0a23232323232323232323232323232323232323232323232323232323232323
 E = 0x0000000000000000000000000000000000000000000000000000000000010001
-N = 0x346497a3b68a3cf1b2ca66c16517e45664434c12773973d8e5300dc7cb4c420f
-X = 0x1e8f6717b6aa034f553006cae30a601070e069996a2c387d75e6be430b6b4c63
+N = 0x99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d
+X = 0x85EE722363960779206A2B37CC8B64B5FC12A934473FA0204BBAAF714BC90C01
 
 res = RSA_Montgomery(M, E, N, k)
 print(hex(res))

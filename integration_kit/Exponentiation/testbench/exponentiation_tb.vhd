@@ -16,13 +16,13 @@ architecture expBehave of exponentiation_tb is
     constant PERIOD : time := 10 ns;
     constant VALID_TIMEOUT : time := 1024*PERIOD;
     ------------------- TEST VECTORS -------------------
-    constant R  : std_logic_vector (C_block_size-1 downto 0) :=  x"2e6da17125d70c3934d664fa6ba06ea66ef2cfb6231a309c6b3fc8e0d2cef7c4";
-    constant R2 : std_logic_vector (C_block_size-1 downto 0) :=  x"2467a971d8bf24adb159e7853cff8763d234683622d953b04908760f68f04045";
+    constant R  : std_logic_vector (C_block_size-1 downto 0) :=  x"666dae8c529a9798eac7a157ff32d7edfd77038f56436722b36f298907008973";
+    constant R2 : std_logic_vector (C_block_size-1 downto 0) :=  x"56ddf8b43061ad3dbcd1757244d1a19e2e8c849dde4817e55bb29d1c20c06364";
 
-    constant M : std_logic_vector (C_block_size-1 downto 0) := x"159e2d74f573b683df9ec95705d272ec39c4b3ef169905d8e6021e49672202f2";
+    constant M : std_logic_vector (C_block_size-1 downto 0) := x"0a23232323232323232323232323232323232323232323232323232323232323";
     constant E : std_logic_vector (C_block_size-1 downto 0) := x"0000000000000000000000000000000000000000000000000000000000010001";
-    constant N : std_logic_vector (C_block_size-1 downto 0) := x"346497a3b68a3cf1b2ca66c16517e45664434c12773973d8e5300dc7cb4c420f";
-    constant X : std_logic_vector (C_block_size-1 downto 0) := x"1e8f6717b6aa034f553006cae30a601070e069996a2c387d75e6be430b6b4c63";
+    constant N : std_logic_vector (C_block_size-1 downto 0) := x"99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d";
+    constant X : std_logic_vector (C_block_size-1 downto 0) := x"85EE722363960779206A2B37CC8B64B5FC12A934473FA0204BBAAF714BC90C01";
 
 	signal message 		: STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
 	signal key_e_d 		: STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
