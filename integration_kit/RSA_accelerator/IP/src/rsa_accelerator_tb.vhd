@@ -368,7 +368,7 @@ begin
 			key_e_d                <= (others => '0');
             r                      <= (others => '0');
             r_square               <= (others => '0');
-			test_case_id           <= 0;
+			test_case_id           <= 2;
 			start_tc               <= '0';
 
 		elsif (clk'event and clk='1') then

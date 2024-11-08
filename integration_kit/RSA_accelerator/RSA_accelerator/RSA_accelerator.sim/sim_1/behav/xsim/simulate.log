@@ -1,0 +1,39 @@
+Time resolution is 1 ps
+Note: ********************************************************************************
+Time: 24 ns  Iteration: 1  Process: /rsa_accelerator_tb/testcase_control  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: STARTING NEW TESTCASE
+Time: 24 ns  Iteration: 1  Process: /rsa_accelerator_tb/testcase_control  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: ********************************************************************************
+Time: 24 ns  Iteration: 1  Process: /rsa_accelerator_tb/testcase_control  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: DRIVE NEW MSGIN_DATA[0000] RTL: 0A23232323232323232323232323232323232323232323232323232323232323
+Time: 48 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgin_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: DRIVE NEW MSGIN_DATA[0001] RTL: 0A232020207478742E6E695F307470203A2020202020202020202020454D414E
+Time: 60 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgin_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: COMPARE MSGOUT_DATA[0000] RTL: 85EE722363960779206A2B37CC8B64B5FC12A934473FA0204BBAAF714BC90C01   EXPECTED: 85EE722363960779206A2B37CC8B64B5FC12A934473FA0204BBAAF714BC90C01
+Time: 2018424 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgout_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: DRIVE NEW MSGIN_DATA[0002] RTL: 0A2320202020202020202020203336203A2020544E554F43204547415353454D
+Time: 2018436 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgin_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: COMPARE MSGOUT_DATA[0001] RTL: 08F9BAF32E8505CBC9A28FED4D5791DCE46508C3D1636232BF91F5D0B6632A9F   EXPECTED: 08F9BAF32E8505CBC9A28FED4D5791DCE46508C3D1636232BF91F5D0B6632A9F
+Time: 4036104 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgout_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Failure: msgin_last/msgout_last mismatch
+Time: 4036104 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgout_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+$finish called at time : 4036104 ns : File "/home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd" Line 579
+Note: ********************************************************************************
+Time: 24 ns  Iteration: 1  Process: /rsa_accelerator_tb/testcase_control  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: STARTING NEW TESTCASE
+Time: 24 ns  Iteration: 1  Process: /rsa_accelerator_tb/testcase_control  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: ********************************************************************************
+Time: 24 ns  Iteration: 1  Process: /rsa_accelerator_tb/testcase_control  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: DRIVE NEW MSGIN_DATA[0000] RTL: 0A23232323232323232323232323232323232323232323232323232323232323
+Time: 48 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgin_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: DRIVE NEW MSGIN_DATA[0001] RTL: 0A232020207478742E6E695F307470203A2020202020202020202020454D414E
+Time: 60 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgin_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: COMPARE MSGOUT_DATA[0000] RTL: 85EE722363960779206A2B37CC8B64B5FC12A934473FA0204BBAAF714BC90C01   EXPECTED: 85EE722363960779206A2B37CC8B64B5FC12A934473FA0204BBAAF714BC90C01
+Time: 2018424 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgout_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: DRIVE NEW MSGIN_DATA[0002] RTL: 0A2320202020202020202020203336203A2020544E554F43204547415353454D
+Time: 2018436 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgin_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: COMPARE MSGOUT_DATA[0001] RTL: 08F9BAF32E8505CBC9A28FED4D5791DCE46508C3D1636232BF91F5D0B6632A9F   EXPECTED: 08F9BAF32E8505CBC9A28FED4D5791DCE46508C3D1636232BF91F5D0B6632A9F
+Time: 4036104 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgout_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Failure: msgin_last/msgout_last mismatch
+Time: 4036104 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgout_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+$finish called at time : 4036104 ns : File "/home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd" Line 579

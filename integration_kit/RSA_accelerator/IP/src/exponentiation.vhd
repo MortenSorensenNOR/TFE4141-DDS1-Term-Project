@@ -73,9 +73,6 @@ architecture expBehave of exponentiation is
 
     -- MonPro output data signals
     signal mon_pro_u : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
-    
-    -- Internal Valid register
-    signal r_valid_out : STD_LOGIC := '0';
 begin
 
     u_mon_pro : entity work.monpro(behavioral)
@@ -116,8 +113,9 @@ begin
             when IDLE => 
                 if valid_in = '1' then
                     next_state <= COMPUTE_M_BAR;
+                else
+                    ready_in <= '1';
                 end if;
-                ready_in <= '1';
 
             when COMPUTE_M_BAR => 
                 if mon_pro_o_valid = '1' then
@@ -158,7 +156,7 @@ begin
                     next_state <= WAIT_DONE_SEND;
                 end if;
 
-            when WAIT_DONE_SEND => 
+            WAIT_DONE_SEND => 
                 if ready_out = '1' then
                     next_state <= IDLE;
                 end if;
@@ -187,7 +185,7 @@ begin
                 mon_pro_start <= '0';
 
                 -- Reset output signals
-                r_valid_out <= '0';
+                valid_out <= '0';
                 
                 x <= (others => '0');
 
@@ -199,7 +197,7 @@ begin
 
                         -- Signals
                         mon_pro_start <= '0';
-                        r_valid_out <= '0';
+                        valid_out <= '0';
                         
                         x <= (others => '0');
 
@@ -272,43 +270,27 @@ begin
 
                     when DONE => 
                         if (ready_out) then
-                            r_valid_out <= '1';
+                            valid_out <= '1';
                         else 
-                            r_valid_out <= '0';
+                            valid_out <= '0';
                         end if;
                         mon_pro_start <= '0';     
                         msg_out <= x;
 
                     when WAIT_DONE_SEND =>
                         if ready_out = '1' then
-                            r_valid_out <= '0';
+                            valid_out <= '0'
                         end if;
 
                     when others =>
                         i <= 256;
                         mon_pro_start <= '0';
-                        r_valid_out <= '0';        
+                        valid_out <= '0';        
                 end case;
             end if;
         end if;
     end process p_signals;
 
-    -- Assign valid_out based on r_valid_out and ready_out
-    valid_assign: process (current_state, ready_out, r_valid_out) is begin
-        case current_state is
-            when IDLE =>
-                valid_out <= r_valid_out and not ready_out;
-                
-            when DONE =>
-                valid_out <= r_valid_out;
-            
-            when WAIT_DONE_SEND =>
-                valid_out <= r_valid_out;
-            
-            when others => 
-                valid_out <= r_valid_out;
-        end case;
-    end process valid_assign;
 
 end expBehave;
 
