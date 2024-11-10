@@ -64,12 +64,12 @@ entity rsa_core is
 
 		r                       :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 		r_square                :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0)
-
 	);
 end rsa_core;
 
 architecture rtl of rsa_core is
-
+    signal delay_out_last : std_logic := '0';
+    -- signal r_msgout_last  : std_logic := '0';
 begin
 	i_exponentiation : entity work.exponentiation
 		generic map (
@@ -95,6 +95,18 @@ begin
 			reset_n   => reset_n
 		);
 
-	msgout_last  <= msgin_last;
+    delay_msgout_last_proc: process (msgout_valid, reset_n) is begin
+        if (not reset_n) then
+            delay_out_last <= '0';
+            msgout_last <= '0';
+        else
+            if (msgin_last) then
+                delay_out_last <= '1';
+            else
+                delay_out_last <= '0';
+            end if;
+            msgout_last <= delay_out_last;
+        end if;
+    end process delay_msgout_last_proc;
 	rsa_status   <= (others => '0');
 end rtl;
