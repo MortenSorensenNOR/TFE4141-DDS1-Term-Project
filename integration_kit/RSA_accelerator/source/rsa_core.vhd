@@ -68,7 +68,9 @@ entity rsa_core is
 end rsa_core;
 
 architecture rtl of rsa_core is
-    signal delay_out_last : std_logic := '0';
+    signal msgin_last_reg : std_logic := '0';
+    signal msgin_last_last_reg: std_logic := '0';
+    signal msgout_last_reg : std_logic := '0';
     -- signal r_msgout_last  : std_logic := '0';
 begin
 	i_exponentiation : entity work.exponentiation
@@ -95,17 +97,23 @@ begin
 			reset_n   => reset_n
 		);
 
-    delay_msgout_last_proc: process (msgout_valid, reset_n) is begin
-        if (not reset_n) then
-            delay_out_last <= '0';
-            msgout_last <= '0';
-        else
-            if (msgin_last) then
-                delay_out_last <= '1';
+    delay_msgout_last_proc: process (clk) is begin
+        if rising_edge(clk) then
+            if (reset_n = '0') then
+                msgin_last_reg <= '0';
+                msgin_last_last_reg <= '0';
+                msgout_last_reg <= '0';
+                msgout_last <= '0';
             else
-                delay_out_last <= '0';
+            
+                if msgin_ready = '1' then
+                    msgin_last_reg <= msgin_last;
+                end if;
+                
+                if msgout_ready = '1' then
+                    msgout_last <= msgin_last_reg;
+                end if;
             end if;
-            msgout_last <= delay_out_last;
         end if;
     end process delay_msgout_last_proc;
 	rsa_status   <= (others => '0');

@@ -1,9 +1,0 @@
-# compile vhdl design source files
-vhdl2008 xil_defaultlib  \
-"../../../../../../Exponentiation/source/monpro.vhd" \
-"../../../../../../Exponentiation/source/exponentiation.vhd" \
-"../../../../../source/rsa_core.vhd" \
-"../../../../../testbench/rsa_accelerator_tb.vhd" \
-
-# Do not sort compile order
-nosort

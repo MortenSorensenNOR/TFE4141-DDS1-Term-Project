@@ -337,7 +337,7 @@ begin
 	-----------------------------------------------------------------------------
 	-- Clock and reset generation
 	-----------------------------------------------------------------------------
-	-- Generates a 50MHz clk
+	-- Generates a 100MHz clk
 	clk_gen: process is
 	begin
 		clk <= '1';
@@ -368,7 +368,7 @@ begin
 			key_e_d                <= (others => '0');
             r                      <= (others => '0');
             r_square               <= (others => '0');
-			test_case_id           <= 2;
+			test_case_id           <= 0;
 			start_tc               <= '0';
 
 		elsif (clk'event and clk='1') then
@@ -575,8 +575,8 @@ begin
 								report "Output message differs from the expected result"
 								severity Failure;
 							
-							report "msgin_counter = " & to_string(msgin_counter) & "  msgin_last = " & to_string(msgin_last);
-							report "msgout_counter = " & to_string(msgout_counter) & "  msgout_counter(1) = " & to_string(msgout_counter(1)) & "  msgout_last = " & to_string(msgout_last);
+							--report "msgin_counter = " & to_string(msgin_counter) & "  msgin_last = " & to_string(msgin_last);
+							--report "msgout_counter = " & to_string(msgout_counter) & "  msgout_counter(1) = " & to_string(msgout_counter(1)) & "  msgout_last = " & to_string(msgout_last);
 							
 							assert msgout_counter(1) = msgout_last
 								report "msgin_last/msgout_last mismatch"
