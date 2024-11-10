@@ -341,9 +341,9 @@ begin
 	clk_gen: process is
 	begin
 		clk <= '1';
-		wait for 6 ns;
+		wait for 5 ns;
 		clk <= '0';
-		wait for 6 ns;
+		wait for 5 ns;
 	end process;
 
 	-- reset_n generator
@@ -368,7 +368,7 @@ begin
 			key_e_d                <= (others => '0');
             r                      <= (others => '0');
             r_square               <= (others => '0');
-			test_case_id           <= 0;
+			test_case_id           <= 4;
 			start_tc               <= '0';
 
 		elsif (clk'event and clk='1') then

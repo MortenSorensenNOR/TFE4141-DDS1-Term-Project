@@ -1,0 +1,2 @@
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'rsa_accelerator_tb'

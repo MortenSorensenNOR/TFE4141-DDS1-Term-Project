@@ -1,0 +1,30 @@
+Time resolution is 1 ps
+Note: ********************************************************************************
+Time: 20 ns  Iteration: 1  Process: /rsa_accelerator_tb/testcase_control  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: STARTING NEW TESTCASE
+Time: 20 ns  Iteration: 1  Process: /rsa_accelerator_tb/testcase_control  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: ********************************************************************************
+Time: 20 ns  Iteration: 1  Process: /rsa_accelerator_tb/testcase_control  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: DRIVE NEW MSGIN_DATA[0000] RTL: 5635AB8CFD7390F2A13BD77238E4DFD2089E0216021806DB3B4E8BEE2B29C735
+Time: 40 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgin_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: DRIVE NEW MSGIN_DATA[0001] RTL: 85EE722363960779206A2B37CC8B64B5FC12A934473FA0204BBAAF714BC90C01
+Time: 50 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgin_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: ********************************************************************************
+Time: 20 ns  Iteration: 1  Process: /rsa_accelerator_tb/testcase_control  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: STARTING NEW TESTCASE
+Time: 20 ns  Iteration: 1  Process: /rsa_accelerator_tb/testcase_control  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: ********************************************************************************
+Time: 20 ns  Iteration: 1  Process: /rsa_accelerator_tb/testcase_control  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: DRIVE NEW MSGIN_DATA[0000] RTL: 5635AB8CFD7390F2A13BD77238E4DFD2089E0216021806DB3B4E8BEE2B29C735
+Time: 40 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgin_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: DRIVE NEW MSGIN_DATA[0001] RTL: 85EE722363960779206A2B37CC8B64B5FC12A934473FA0204BBAAF714BC90C01
+Time: 50 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgin_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: COMPARE MSGOUT_DATA[0000] RTL: 2323232323232323232323232323232323232323232323232323232323232323   EXPECTED: 2323232323232323232323232323232323232323232323232323232323232323
+Time: 2299310 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgout_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: DRIVE NEW MSGIN_DATA[0002] RTL: 81DC2A1F43B2A9F27E13C73493204D823EED68DDABE9B79BFBFAA11BBACC35FE
+Time: 2299320 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgin_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Note: COMPARE MSGOUT_DATA[0001] RTL: 0A23232323232323232323232323232323232323232323232323232323232323   EXPECTED: 0A23232323232323232323232323232323232323232323232323232323232323
+Time: 4605840 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgout_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+Failure: msgin_last/msgout_last mismatch
+Time: 4605840 ns  Iteration: 1  Process: /rsa_accelerator_tb/msgout_bfm  File: /home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd
+$finish called at time : 4605840 ns : File "/home/morten/dev/TFE4141-DDS1-Term-Project/integration_kit/RSA_accelerator/testbench/rsa_accelerator_tb.vhd" Line 579
