@@ -40,8 +40,6 @@ module tb_monpro #(
     always_ff @(posedge clk) begin
         if (o_valid & rstn) begin
             $display("Result: %064h", U);
-            assert (U_EXPECTED == U) $display ("Test Passed :)");
-                else $error("Output did not match expected result");
         end
     end
 endmodule

@@ -59,17 +59,20 @@ int main(int argc, char** argv) {
                 dut->start = 1;
             }
 
-            static int was_valid = 0;
+            static bool finished = false;
             if (dut->o_valid) {
-                was_valid = 1;
+                printf("Finished in %lu cycles\n", posedge_cnt);
+                finished = true;
             }
 
-            if (was_valid) {
-                static int clk_count_wait_done = 0;
-                clk_count_wait_done++;
-                if (clk_count_wait_done == 64)
+            if (finished) {
+                static int cnt = 0;
+                cnt++;
+                if (cnt == 2) {
                     break;
+                }
             }
+
         }
 
         m_trace->dump(sim_time);
