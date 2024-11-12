@@ -271,7 +271,7 @@ begin
                         end if;
 
                     when DONE => 
-                        if (ready_out) then
+                        if (ready_out = '1') then
                             r_valid_out <= '1';
                         else 
                             r_valid_out <= '0';
