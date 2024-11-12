@@ -1,36 +1,46 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Thu Oct 31 15:26:28 2024
+[*] Mon Nov 11 21:16:40 2024
 [*]
 [dumpfile] "/home/morten/dev/TFE4141-DDS1-Term-Project/monpro/sv/waveform.vcd"
-[dumpfile_mtime] "Thu Oct 31 15:16:24 2024"
-[dumpfile_size] 40072
+[dumpfile_mtime] "Mon Nov 11 21:02:55 2024"
+[dumpfile_size] 476059
 [savefile] "/home/morten/dev/TFE4141-DDS1-Term-Project/monpro/sv/setup.gtkw"
-[timestart] 15
-[size] 2486 600
-[pos] -51 881
-*-1.692917 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[timestart] 434
+[size] 2490 1536
+[pos] -2541 -24
+*-4.000000 541 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
+[treeopen] TOP.tb_monpro.
 [sst_width] 233
-[signals_width] 262
+[signals_width] 792
 [sst_expanded] 1
-[sst_vpaned_height] 144
-@22
-TOP.monpro.r_A[63:0]
-TOP.monpro.r_B[63:0]
-TOP.monpro.r_N[63:0]
-@100000028
-TOP.monpro.current_state[2:0]
+[sst_vpaned_height] 470
 @28
-TOP.monpro.adder_input_mux_select
-TOP.monpro.adder_bypass_mux_select
-TOP.monpro.adder_result_shift_mux_select
+TOP.tb_monpro.monpro_inst.clk
 @22
-TOP.monpro.adder_input[64:0]
-TOP.monpro.adder_result[64:0]
-TOP.monpro.adder_bypass_result[64:0]
-TOP.monpro.monpro_comb_result[64:0]
-@23
-TOP.monpro.U_reg[64:0]
+TOP.tb_monpro.monpro_inst.next_state[3:0]
+TOP.tb_monpro.monpro_inst.current_state[3:0]
+@25
+TOP.tb_monpro.monpro_inst.i_cnt[8:0]
+@22
+TOP.tb_monpro.monpro_inst.monpro_comb_result[256:0]
+TOP.tb_monpro.monpro_inst.U_reg[256:0]
+@28
+TOP.tb_monpro.monpro_inst.w_A_i
+TOP.tb_monpro.monpro_inst.w_B_0
+TOP.tb_monpro.monpro_inst.w_A_and_B
+TOP.tb_monpro.monpro_inst.w_U_0
+TOP.tb_monpro.monpro_inst.w_is_odd
+TOP.tb_monpro.monpro_inst.w_A_i_next
+TOP.tb_monpro.monpro_inst.w_B_0_next
+TOP.tb_monpro.monpro_inst.w_A_and_B_next
+TOP.tb_monpro.monpro_inst.w_U_0_next
+TOP.tb_monpro.monpro_inst.w_is_odd_next
+TOP.tb_monpro.monpro_inst.alu_sub_mode
+TOP.tb_monpro.monpro_inst.adder_input_mux_select_1
+TOP.tb_monpro.monpro_inst.adder_input_mux_select_2[1:0]
+TOP.tb_monpro.monpro_inst.adder_bypass_mux_select
+TOP.tb_monpro.monpro_inst.adder_result_shift_bypass
 [pattern_trace] 1
 [pattern_trace] 0

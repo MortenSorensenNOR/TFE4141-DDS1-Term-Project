@@ -3,9 +3,9 @@
 module tb_monpro #(
     parameter unsigned DATAWIDTH = 256,
 
-    parameter logic unsigned [DATAWIDTH-1:0] A = 256'h1f94373be50b1cc0ced44eebde66dd7acb02d59c51941d2497184c45aab39f5f,
-    parameter logic unsigned [DATAWIDTH-1:0] B = 256'h1f94373be50b1cc0ced44eebde66dd7acb02d59c51941d2497184c45aab39f5f,
-    parameter logic unsigned [DATAWIDTH-1:0] N = 256'h2e5f7417fd9c9471c4ee1077900d7e4051e4d3f682b95bc27f5d128e05df33b5,
+    parameter logic unsigned [DATAWIDTH-1:0] A = 256'h79d5686c6da2c90cd58f3ed75486c6adacbf3e872a288a754763b6da42bf2478,
+    parameter logic unsigned [DATAWIDTH-1:0] B = 256'h79d5686c6da2c90cd58f3ed75486c6adacbf3e872a288a754763b6da42bf2478,
+    parameter logic unsigned [DATAWIDTH-1:0] N = 256'h99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d,
     parameter logic unsigned [DATAWIDTH-1:0] U_EXPECTED = 256'h1362a24b630a8e265b65d361fb91a90e5a2dc8b25bb2ccc2afc1d440adedd68
     ) (
     input logic clk,
