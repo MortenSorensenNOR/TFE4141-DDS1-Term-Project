@@ -29,7 +29,7 @@ entity rsa_regio is
 	generic (
 		-- Users to add parameters here
 		C_BLOCK_SIZE        : integer := 256;
-		C_register_count    : integer := 33; --optinally replace with 64 --should probably be constant
+		C_register_count    : integer := 64; --optinally replace with 64 --should probably be constant
 
 		-- User parameters ends
 		-- Do not modify the parameters beyond this line
@@ -46,6 +46,7 @@ entity rsa_regio is
 		rsa_status          : in  std_logic_vector(31 downto 0);
 		r_precomputed       : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 		r_pow2_precomputed  : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+        sub_val_precomputed : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 
 		-- User ports ends
 		-- Do not modify the ports beyond this line
@@ -390,7 +391,10 @@ begin
 	-- Precomputed values
 	r_precomputed <= slv_reg(23) & slv_reg(22) & slv_reg(21) & slv_reg(20) & slv_reg(19) & slv_reg(18) & slv_reg(17) & slv_reg(16);
 	r_pow2_precomputed <= slv_reg(31) & slv_reg(30) & slv_reg(29) & slv_reg(28) & slv_reg(27) & slv_reg(26) & slv_reg(25) & slv_reg(24);
+
 	-- write to registers [63..33]
+    sub_val_precomputed <= slv_reg(40) & slv_reg(39) & slv_reg(38) & slv_reg(37) & slv_reg(36) & slv_reg(35) & slv_reg(34) & slv_reg(33);
+
 	-- read from registers [31..16]
 
 	-- User logic ends

@@ -5,7 +5,12 @@ from Crypto.Util import number
 from Crypto.Util.number import inverse
 
 def MonPro(a_bar, b_bar, n, k, debug = False):
-    print(f"B + N: {b_bar + n:064x}")
+    if (debug):
+        print(f"B = {b_bar:064x}\nN = {n:064x}")
+        print(f"B + N: {(b_bar + n):064x}")
+        print("")
+
+    m = 2**k - n
 
     u = 0
     for i in range(k):
@@ -34,7 +39,7 @@ def MonPro(a_bar, b_bar, n, k, debug = False):
             print("")
 
     if (u >= n):
-        u -= n
+        u = (u + m) & (2**k - 1)
         if debug:
             print("Final subtraction")
 
@@ -43,26 +48,43 @@ def MonPro(a_bar, b_bar, n, k, debug = False):
 
     return u
 
-def RSA_Montgomery(M, e, n, k):
+def RSA_Montgomery(M, e, n, k, debug = False):
     # Precomputed
     r = 1 << k
     x_bar = r % n
     r_square = (r * r) % n
 
-    # Main algorithm
-    M_bar = MonPro(M, r_square, n, k)
-
-    for i in range(k - 1, -1, -1):
-        print(f"1: xbar = {x_bar:064x}")
-        x_bar = MonPro(x_bar, x_bar, n, k, False)
-        print(f"xbar = {x_bar:064x}")
+    if (debug):
+        print("R:", hex(x_bar))
+        print("R^2:", hex(r_square))
         print("")
 
-        if (e >> i) & 1:
-            print(f"2: xbar = {x_bar:064x}\nMbar = {M_bar:064x}")
-            x_bar = MonPro(M_bar, x_bar, n, k)
+    debug_point = 10
+
+    # Main algorithm
+    if (debug):
+        print(f"0: M = {M:064x}\nr_square = {r_square:064x}")
+    M_bar = MonPro(M, r_square, n, k)
+    if (debug):
+        print(f"M_bar = {M_bar:064x}")
+        print("")
+
+    for i in range(k - 1, -1, -1):
+        if (debug):
+            print(f"Iteration: {i}:")
+            print(f"1: xbar = {x_bar:064x}")
+        x_bar = MonPro(x_bar, x_bar, n, k, i == debug_point)
+        if (debug):
             print(f"xbar = {x_bar:064x}")
             print("")
+
+        if (e >> i) & 1:
+            if (debug):
+                print(f"2: xbar = {x_bar:064x}\nMbar = {M_bar:064x}")
+            x_bar = MonPro(M_bar, x_bar, n, k, i == debug_point)
+            if (debug):
+                print(f"xbar = {x_bar:064x}")
+                print("")
 
     x = MonPro(x_bar, 1, n, k)
 
@@ -83,19 +105,19 @@ def ModularExponentiationVerify(base, exp, mod):
 
 k = 256
 
-A = 0x79d5686c6da2c90cd58f3ed75486c6adacbf3e872a288a754763b6da42bf2478
-B = 0x79d5686c6da2c90cd58f3ed75486c6adacbf3e872a288a754763b6da42bf2478
-N = 0x99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d
-
-result = MonPro(A, B, N, k, True)
-print(f"U = {result:064x}")
-
-# M = 0x0A2320202020202020202020203336203A2020544E554F43204547415353454D
-# E = 0x0000000000000000000000000000000000000000000000000000000000010001
+# A = 0x0a23232323232323232323232323232323232323232323232323232323232323
+# B = 0x56ddf8b43061ad3dbcd1757244d1a19e2e8c849dde4817e55bb29d1c20c06364
 # N = 0x99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d
 #
-# result = RSA_Montgomery(M, E, N, k)
-# print(f"Result = {result:064x}")
+# result = MonPro(A, B, N, k, True)
+# print(f"U = {result:064x}")
+
+M = 0x0a23232323232323232323232323232323232323232323232323232323232323
+E = 0x0000000000000000000000000000000000000000000000000000000000010001
+N = 0x99925173ad65686715385ea800cd28120288fc70a9bc98dd4c90d676f8ff768d
+
+result = RSA_Montgomery(M, E, N, k, False)
+print(f"Result = {result:064x}")
 
 # p = number.getPrime(127)
 # q = number.getPrime(127)
@@ -109,14 +131,14 @@ print(f"U = {result:064x}")
 #
 # M = 12312321321421
 #
-# x_mont_encrypt, case_dist = RSA_Montgomery(M, e, n, k)
+# x_mont_encrypt = RSA_Montgomery(M, e, n, k)
 # x_verify_encrypt = ModularExponentiationVerify(M, e, n)
 # assert(x_mont_encrypt == x_verify_encrypt)
 #
-# x_mont_decrypt, case_dist = RSA_Montgomery(x_mont_encrypt, d, n, k)
+# x_mont_decrypt = RSA_Montgomery(x_mont_encrypt, d, n, k)
 # x_verify_decrypt = ModularExponentiationVerify(x_mont_encrypt, d, n)
 # assert(x_mont_decrypt == x_verify_decrypt)
-#
+
 # case_sum = 2 * case_dist[0] + case_dist[1] + case_dist[2] + case_dist[3]
 # if case_sum != 0:
 #     print(f"Distribution:\t Case 1: {case_dist[0] * 2}\t Case 2: {case_dist[1]}\t Case 3: {case_dist[2]}\t Case 4: {case_dist[3]}\t Loading: {case_dist[4]}\t")

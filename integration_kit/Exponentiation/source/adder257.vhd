@@ -10,11 +10,12 @@ entity adder257 is
         clk   : in std_logic;
         ready : out std_logic;
 
-        i_A, i_B             : in std_logic_vector(256 downto 0);
-        i_dv                 : in std_logic;
+        i_A  : in std_logic_vector(256 downto 0);
+        i_B  : in std_logic_vector(256 downto 0);
+        i_dv : in std_logic;
 
-        o_C                  : out std_logic_vector(257 downto 0) := (others => '0');
-        o_dv                 : out std_logic := '0'
+        o_C  : out std_logic_vector(257 downto 0) := (others => '0');
+        o_dv : out std_logic := '0'
     );
 end adder257;
 
@@ -29,7 +30,7 @@ architecture behavioral of adder257 is
     signal A_upper      : std_logic_vector(0 downto 0) := "0";
     signal B_upper      : std_logic_vector(0 downto 0) := "0";
 
-    signal carry        : std_logic_vector(0 downto 0) := "0";
+    signal carry        : std_logic_vector(0 downto 0) := (others => '0');
 
     signal C_blocks     : chunk_array_t(3 downto 0) := (others => (others => '0'));
     signal C_carry      : std_logic_vector(1 downto 0);
@@ -61,6 +62,10 @@ begin
                 C_blocks(1) <= (others => '0');
                 C_blocks(2) <= (others => '0');
                 C_blocks(3) <= (others => '0');
+                carry <= (others => '0');
+                carry_last := (others => '0');
+            elsif (iter = 3) then
+                iter <= 0;
             elsif (iter /= 0) then
                 iter <= iter + 1;
             end if;
@@ -86,7 +91,7 @@ begin
         end if;
     end process;
 
-    carry_process: process (carry) begin
+    carry_process: process (carry, A_upper, B_upper) begin
         C_carry <= std_logic_vector(unsigned('0' & A_upper) + unsigned('0' & B_upper) + unsigned('0' & carry));
     end process;
 

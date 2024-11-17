@@ -18,6 +18,7 @@ entity monpro is
         i_A : in std_logic_vector (DATA_SIZE-1 downto 0);
         i_B : in std_logic_vector (DATA_SIZE-1 downto 0);
         i_N : in std_logic_vector (DATA_SIZE-1 downto 0);
+        i_M : in std_logic_vector (DATA_SIZE-1 downto 0); -- Precomputed 2^k - n
         o_U : out std_logic_vector (DATA_SIZE-1 downto 0)
     ) ;
 end monpro ; 
@@ -30,21 +31,28 @@ architecture behavioral of monpro is
     signal r_A : std_logic_vector (DATA_SIZE-1 downto 0);
     signal r_B : std_logic_vector (DATA_SIZE-1 downto 0);
     signal r_N : std_logic_vector (DATA_SIZE-1 downto 0);
+    signal r_M : std_logic_vector (DATA_SIZE-1 downto 0); -- Precomputed 2^k - n
 
     signal U_reg : std_logic_vector (DATA_SIZE downto 0);
     signal B_N_sum_reg : std_logic_vector (DATA_SIZE downto 0);
 
-    signal w_A_i : std_logic;
-    signal w_B_0 : std_logic;
-    signal w_U_0 : std_logic;
-    signal w_A_and_B : std_logic;
-    signal w_is_odd : std_logic;
+    signal w_A_i        : std_logic;
+    signal w_B_0        : std_logic;
+    signal w_U_0        : std_logic;
+    signal w_A_and_B    : std_logic;
+    signal w_is_odd     : std_logic;
 
-    signal w_A_i_next : std_logic;
-    signal w_B_0_next : std_logic;
-    signal w_U_0_next : std_logic;
-    signal w_A_and_B_next : std_logic;
-    signal w_is_odd_next : std_logic;
+    signal w_A_i_next       : std_logic;
+    signal w_B_0_next       : std_logic;
+    signal w_U_0_next       : std_logic;
+    signal w_A_and_B_next   : std_logic;
+    signal w_is_odd_next    : std_logic;
+
+    signal w_A_i_next_next      : std_logic;
+    signal w_B_0_next_next      : std_logic;
+    signal w_U_0_next_next      : std_logic;
+    signal w_A_and_B_next_next  : std_logic;
+    signal w_is_odd_next_next   : std_logic;
 
     -- Combinational
     signal adder_input_1 : std_logic_vector (DATA_SIZE downto 0);
@@ -278,7 +286,6 @@ begin
                         adder_input_mux_select_2 <= "01";
                         adder_bypass_mux_select <= '0';
                         adder_result_shift_bypass <= '1';
-                        
 
                     when MONPRO_COMPUTE_B_N =>
                         -- Set mux signals for B + N compute
@@ -371,16 +378,24 @@ begin
         end if;
     end process ; -- FSM_ASSIG
 
-    w_A_i <= r_A(0);
-    w_B_0 <= r_B(0);
-    w_U_0 <= U_reg(0);
-    w_A_and_B <= w_A_i and w_B_0;
-    w_is_odd <= w_U_0 xor (w_A_and_B);
+    w_A_i           <= r_A(0);
+    w_B_0           <= r_B(0);
+    w_U_0           <= U_reg(0);
+    w_A_and_B       <= w_A_i and w_B_0;
+    w_is_odd        <= w_U_0 xor (w_A_and_B);
 
-    w_A_i_next <= r_A(1);
-    w_B_0_next <= r_B(0);
-    w_A_and_B_next <= w_A_i_next and w_B_0_next;
-    w_U_0_next <= monpro_comb_result(0);
-    w_is_odd_next <= w_U_0_next xor (w_A_and_B_next);
+    w_A_i_next      <= r_A(1);
+    w_B_0_next      <= r_B(0);
+    w_A_and_B_next  <= w_A_i_next and w_B_0_next;
+    w_U_0_next      <= monpro_comb_result(0);
+    w_is_odd_next   <= w_U_0_next xor (w_A_and_B_next);
+
+    -- TODO: Make sure this is correct
+    w_A_i_next_next     <= r_A(2);
+    w_B_0_next_next     <= r_B(0);
+    w_A_and_B_next_next <= w_A_i_next_next and w_B_0_next_next;
+    w_U_0_next_next     <= monpro_comb_result(0);
+    w_is_odd_next_next  <= w_U_0_next_next xor (w_A_and_B_next_next);
 
 end architecture ;
+
