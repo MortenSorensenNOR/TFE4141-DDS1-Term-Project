@@ -27,6 +27,10 @@ print(f"C = {hex(get_64_bit_hex(C))}, {hex(get_64_bit_hex(C, 1))}, {hex(get_64_b
 
 print("")
 print(hex(A + B))
-print(math.log2(A + B))
+# print(math.log2(A + B))
 
-print((0x2d4f8e0833a6366e63d4edca2f27cbc12d9321b0500944df635fe0f34d467c71b == C))
+# print((0x2d4f8e0833a6366e63d4edca2f27cbc12d9321b0500944df635fe0f34d467c71b == C))
+#
+# print(bin(A))
+# print(bin(B))
+# print(bin(C))
