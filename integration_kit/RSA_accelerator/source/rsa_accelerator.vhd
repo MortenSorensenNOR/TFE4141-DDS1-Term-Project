@@ -198,9 +198,9 @@ u_rsa_msgout : entity work.rsa_msgout
 	);
 
 u_rsa_core : entity work.rsa_core
-	generic map (
-		C_BLOCK_SIZE => C_BLOCK_SIZE
-	)
+	--generic map (
+	--	C_BLOCK_SIZE => C_BLOCK_SIZE
+	--)
 	port map (
 		-----------------------------------------------------------------------------
 		-- Clocks and reset
