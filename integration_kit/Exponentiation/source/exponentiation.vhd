@@ -18,6 +18,7 @@ entity exponentiation is
         -- Precomputed input data
         r           : in STD_LOGIC_VECTOR (C_block_size-1 downto 0);
         r_square    : in STD_LOGIC_VECTOR (C_block_size-1 downto 0);
+        sub_val_pre : in STD_LOGIC_VECTOR (C_block_size-1 downto 0);
 
 		--ouput controll
         ready_out	: in STD_LOGIC;     -- The output interface is ready for a new message
@@ -50,16 +51,16 @@ architecture expBehave of exponentiation is
     signal i : integer range 0 to 256 := 256;
 
     -- Shift register for key_e_d
-    signal r_key_e_d : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
+    signal r_key_e_d : STD_LOGIC_VECTOR (C_block_size-1 downto 0) := (others => '0');
 
     -- Data registers
-    signal x_bar : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
-    signal M_bar : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
+    signal x_bar : STD_LOGIC_VECTOR (C_block_size-1 downto 0) := (others => '0');
+    signal M_bar : STD_LOGIC_VECTOR (C_block_size-1 downto 0) := (others => '0');
     
-    signal x : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
+    signal x : STD_LOGIC_VECTOR (C_block_size-1 downto 0) := (others => '0');
 
     -- Save the r_square value
-    signal r_r_square : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
+    signal r_r_square : STD_LOGIC_VECTOR (C_block_size-1 downto 0) := (others => '0');
 
     -- MonPro signals
     signal mon_pro_ready    : STD_LOGIC := '0'; 
@@ -67,9 +68,10 @@ architecture expBehave of exponentiation is
     signal mon_pro_start    : STD_LOGIC := '0';
 
     -- MonPro input data signals
-    signal mon_pro_A : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
-    signal mon_pro_B : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
-    signal mon_pro_key_n : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
+    signal mon_pro_A : STD_LOGIC_VECTOR (C_block_size-1 downto 0) := (others => '0');
+    signal mon_pro_B : STD_LOGIC_VECTOR (C_block_size-1 downto 0) := (others => '0');
+    signal mon_pro_key_n : STD_LOGIC_VECTOR (C_block_size-1 downto 0) := (others => '0');
+    signal mon_pro_sub_val : STD_LOGIC_VECTOR (C_block_size-1 downto 0) := (others => '0');
 
     -- MonPro output data signals
     signal mon_pro_u : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
@@ -78,7 +80,7 @@ architecture expBehave of exponentiation is
     signal r_valid_out : STD_LOGIC := '0';
 begin
 
-    u_mon_pro : entity work.monpro(behavioral)
+    u_mon_pro : entity work.monpro_new(behavioral)
     generic map (
         DATA_SIZE => C_block_size
     )
@@ -93,6 +95,7 @@ begin
         i_A => mon_pro_A,
         i_B => mon_pro_B,
         i_N => mon_pro_key_n,
+        i_M => mon_pro_sub_val,
         o_U => mon_pro_u
     );
 
@@ -182,6 +185,7 @@ begin
                 mon_pro_key_n <= (others => '0');
                 mon_pro_A <= (others => '0');
                 mon_pro_B <= (others => '0');
+                mon_pro_sub_val <= (others => '0');
 
                 -- Reset signals
                 mon_pro_start <= '0';
@@ -211,6 +215,7 @@ begin
                             r_key_e_d  <= key_e_d;
 
                             mon_pro_key_n <= key_n; -- Wont change during RSA compute
+                            mon_pro_sub_val <= sub_val_pre;
                         end if;
 
                     when COMPUTE_M_BAR =>

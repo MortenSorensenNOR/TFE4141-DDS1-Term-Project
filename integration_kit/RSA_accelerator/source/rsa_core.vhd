@@ -70,7 +70,8 @@ entity rsa_core is
 		rsa_status              : out std_logic_vector(31 downto 0);
 
 		r                       :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0);
-		r_square                :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0)
+		r_square                :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+		sub_val_pre             :  in std_logic_vector(C_BLOCK_SIZE-1 downto 0)
 	);
 end rsa_core;
 

@@ -108,6 +108,7 @@ architecture rtl of rsa_accelerator is
 
 	signal r            : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 	signal r_square     : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+	signal sub_val_pre  : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 
 begin
 
@@ -126,6 +127,7 @@ u_rsa_regio : entity work.rsa_regio
 
 		r_precomputed       => r,
 		r_pow2_precomputed  => r_square,
+        sub_val_precomputed => sub_val_pre,
 
 		S_AXI_ACLK              => clk,
 		S_AXI_ARESETN           => reset_n,
@@ -232,7 +234,8 @@ u_rsa_core : entity work.rsa_core
 		rsa_status             => rsa_status,
 
         r                      => r,
-        r_square               => r_square
+        r_square               => r_square,
+        sub_val_pre            => sub_val_pre
 	);
 
 end rtl;

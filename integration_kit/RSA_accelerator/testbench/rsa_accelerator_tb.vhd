@@ -67,6 +67,7 @@ architecture struct of rsa_accelerator_tb is
 
 	signal r            : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 	signal r_square     : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+	signal sub_val_pre  : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 
 	-----------------------------------------------------------------------------
 	-- Testcases
@@ -205,7 +206,8 @@ architecture struct of rsa_accelerator_tb is
 		signal kn  : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 		signal ked : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
         signal r_val        : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
-        signal r_sqr_val    : out std_logic_vector(C_BLOCK_SIZE-1 downto 0)
+        signal r_sqr_val    : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+        signal r_sub_val    : out std_logic_vector(C_BLOCK_SIZE-1 downto 0)
 	)is
 		variable line_from_file: line;
 		variable s1            : string(1 downto 1);
@@ -216,6 +218,7 @@ architecture struct of rsa_accelerator_tb is
 		variable n             : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
         variable r             : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
         variable r_square      : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+        variable sub_val_pre   : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
 	begin
 		-- Read comment
 		readline(tc_inp, line_from_file);
@@ -247,10 +250,17 @@ architecture struct of rsa_accelerator_tb is
 
 		-- Read comment
 		readline(tc_inp, line_from_file);
-        -- Read R
+        -- Read R square
         readline(tc_inp, line_from_file);
         read(line_from_file, s64);
         r_square := str_to_stdvec(s64);
+
+		-- Read comment
+		readline(tc_inp, line_from_file);
+        -- Read sub val precompute
+        readline(tc_inp, line_from_file);
+        read(line_from_file, s64);
+        sub_val_pre := str_to_stdvec(s64);
 
 		-- Read comment
 		readline(tc_inp, line_from_file);
@@ -275,6 +285,7 @@ architecture struct of rsa_accelerator_tb is
 
         r_val <= r;
         r_sqr_val <= r_square;
+        r_sub_val <= sub_val_pre;
 	end read_keys_and_command;
 
 	-----------------------------------------------------------------------------
@@ -368,6 +379,7 @@ begin
 			key_e_d                <= (others => '0');
             r                      <= (others => '0');
             r_square               <= (others => '0');
+            sub_val_pre            <= (others => '0');
 			test_case_id           <= 0;
 			start_tc               <= '0';
 
@@ -388,7 +400,7 @@ begin
 					tc_ctrl_state <= e_TC_RUN_TC;
 					open_tc_inp(test_case_id);
 					open_tc_otp(test_case_id);
-					read_keys_and_command(key_n, key_e_d, r, r_square);
+					read_keys_and_command(key_n, key_e_d, r, r_square, sub_val_pre);
 
 					start_tc      <= '1';
 
@@ -639,7 +651,8 @@ u_rsa_core : entity work.rsa_core
 		rsa_status             => rsa_status,
 
         r                      => r,
-        r_square               => r_square
+        r_square               => r_square,
+        sub_val_pre            => sub_val_pre
 	);
 
 end struct;
