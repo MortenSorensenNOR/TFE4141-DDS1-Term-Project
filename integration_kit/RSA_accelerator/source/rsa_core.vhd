@@ -77,40 +77,24 @@ end rsa_core;
 
 architecture rtl of rsa_core is
 
-    -- Signal declarations
-    -- Message ID signals
-    signal assigned_message_id : std_logic_vector(ID_WIDTH-1 downto 0);
-
-    -- Core status signals
-    signal core_busy : std_logic_vector(NUM_CORES-1 downto 0);
-
-    -- Core message ID mapping
-    signal core_message_ids : core_message_ids_array;
-
     -- Shared signals to pass data to cores
-    signal shared_valid_in   : std_logic;
-    signal shared_message    : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
-    signal shared_message_id : std_logic_vector(ID_WIDTH-1 downto 0);
-    signal core_select       : std_logic_vector(NUM_CORES-1 downto 0);
+    signal dispatch_message         : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
+    signal dispatch_message_id      : std_logic_vector(ID_WIDTH-1 downto 0);
+    signal dispatch_message_last    : std_logic;
+
+    signal core_ready_array         : std_logic_vector(NUM_CORES-1 downto 0);
+    signal core_select_array        : std_logic_vector(NUM_CORES-1 downto 0);
 
     -- Signals to connect to the collector
-    signal core_valid_outs  : std_logic_vector(NUM_CORES-1 downto 0);
-    signal core_msg_outs : core_msg_outs_array;
+    signal core_valid_outs          : std_logic_vector(NUM_CORES-1 downto 0);
+    signal core_msg_outs            : core_msg_outs_array;
+
+    signal core_message_out_array       : core_msg_out_array_type;
+    signal core_message_id_out_array    : core_msg_id_out_array_type;
+    signal core_message_last_out_array  : std_logic_vector(NUM_CORES-1 downto 0);
 
 begin
 
-    -- Instantiate the message ID generator
-    msg_id_gen_inst : entity work.message_id_generator
-        generic map (
-            ID_WIDTH => ID_WIDTH
-        )
-        port map (
-            clk                 => clk,
-            reset_n             => reset_n,
-            msgin_valid         => msgin_valid,
-            msgin_ready         => msgin_ready,
-            assigned_message_id => assigned_message_id
-        );
 
     -- Instantiate the dispatcher
     dispatcher_inst : entity work.dispatcher
@@ -122,39 +106,46 @@ begin
         port map (
             clk                 => clk,
             reset_n             => reset_n,
+
             msgin_valid         => msgin_valid,
             msgin_ready         => msgin_ready,
             msgin_data          => msgin_data,
-            assigned_message_id => assigned_message_id,
-            core_busy           => core_busy,
-            core_valid_in       => shared_valid_in,
-            core_message        => shared_message,
-            core_message_id     => shared_message_id,
-            core_select         => core_select
+            msgin_last          => msgin_last,
+
+            core_ready_array    => core_ready_array,
+            core_message        => dispatch_message,
+            core_message_id     => dispatch_message_id,
+            core_message_last   => dispatch_message_last,
+            core_select_array   => core_select_array
         );
 
     -- Instantiate the exponentiation core wrappers
     gen_exponentiation_cores : for i in 0 to NUM_CORES-1 generate
-        exp_core_wrapper_inst : entity work.exponentiation_core_wrapper
+        exp_core : entity work.exponentiation
             generic map (
                 C_BLOCK_SIZE => C_BLOCK_SIZE,
                 ID_WIDTH     => ID_WIDTH
             )
             port map (
-                clk              => clk,
-                reset_n          => reset_n,
-                shared_valid_in  => shared_valid_in,
-                shared_message   => shared_message,
-                shared_message_id=> shared_message_id,
-                core_select      => core_select(i),
-                key_e_d          => key_e_d,
-                key_n            => key_n,
-                r                => r,
-                r_square         => r_square,
-                valid_out        => core_valid_outs(i),
-                msg_out          => core_msg_outs(i),
-                core_busy        => core_busy(i),
-                core_message_id  => core_message_ids(i)
+                message         => dispatch_message,
+                message_id      => dispatch_message_id,
+                message_last    => dispatch_message_last,
+                key_e_d         => key_e_d,
+                key_n           => key_n,
+
+                r               => r,
+                r_square        => r_square,
+                sub_val_pre     => sub_val_pre,
+
+                ready_out       => core_ready_array(i),
+                valid_out       => core_valid_outs(i),
+
+                msg_out         => core_msg_outs(i),
+                msg_id_out      => core_message_id_out_array(i),
+                msg_last_out    => core_message_last_out_array(i),
+
+                clk             => clk,
+                reset_n         => reset_n
             );
     end generate;
 
@@ -166,16 +157,18 @@ begin
             ID_WIDTH     => ID_WIDTH
         )
         port map (
-            clk              => clk,
-            reset_n          => reset_n,
-            core_valid_outs  => core_valid_outs,
-            core_msg_outs    => core_msg_outs,
-            core_message_ids => core_message_ids,
-            msgout_valid     => msgout_valid,
-            msgout_ready     => msgout_ready,
-            msgout_data      => msgout_data,
-            msgout_last      => msgout_last
-            --collector_status => open  -- Or connect as needed
+            clk         => clk,         
+            reset_n     => reset_n,
+
+            core_valid_array        => core_valid_outs,
+            collector_ready_array   => core_ready_array,
+            core_msg_array          => core_msg_outs,
+            core_msg_ids            => core_message_id_out_array,
+
+            msgout_valid            => msgout_valid,
+            msgout_ready            => msgout_ready,
+            msgout_data             => msgout_data,
+            msgout_last             => msgout_last
         );
 
 

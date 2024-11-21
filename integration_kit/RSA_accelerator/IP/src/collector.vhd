@@ -18,15 +18,14 @@ entity collector is
         -- Inputs from exponentiation cores
         core_valid_array        : in std_logic_vector(NUM_CORES-1 downto 0);
         collector_ready_array   : out std_logic_vector(NUM_CORES-1 downto 0);
-        core_msg_array          : in core_message_array_type;
-        core_msg_ids            : in core_message_id_array_type;
-        core_msg_last           : in std_logic_vector(NUM_CORES-1 downto 0);
+        core_msg_array          : in core_msg_out_array_type;
+        core_msg_ids            : in core_msg_id_out_array_type;
 
         -- Outputs to rsa_msgout
         msgout_valid            : out std_logic;
         msgout_ready            : in std_logic;
         msgout_data             : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
-        msgout_last             : out std_logic
+        msgout_last             : out std_logic  -- Set to '1' if required
     );
 end collector;
 
@@ -37,7 +36,6 @@ architecture Behavioral of collector is
         data       : std_logic_vector(C_BLOCK_SIZE-1 downto 0);
         message_id : std_logic_vector(ID_WIDTH-1 downto 0);
         full       : std_logic;
-        last       : std_logic;
     end record;
 
     -- Buffer to hold messages from cores
@@ -50,7 +48,7 @@ architecture Behavioral of collector is
     -- Internal signals for outputs
     signal msgout_valid_int    : std_logic := '0';
     signal msgout_data_int     : std_logic_vector(C_BLOCK_SIZE-1 downto 0) := (others => '0');
-    signal msgout_last_int     : std_logic := '0';
+    signal msgout_last_int     : std_logic := '0';  -- Set accordingly if required
 
     signal output_register : std_logic_vector(C_BLOCK_SIZE-1 downto 0) := (others => '0');
     signal output_valid    : std_logic := '0';
@@ -66,13 +64,12 @@ begin
                     buf(i).full <= '0';
                     buf(i).data <= (others => '0');
                     buf(i).message_id <= (others => '0');
-                    buf(i).last <= '0';
                     collector_ready_array(i) <= '0';
                 end loop;
                 output_valid       <= '0';
                 msgout_valid_int   <= '0';
                 msgout_data_int    <= (others => '0');
-                msgout_last_int    <= '0'; 
+                msgout_last_int    <= '0';  -- Set accordingly if required
             else
                 -- For each core
                 for i in 0 to NUM_CORES-1 loop
@@ -88,7 +85,6 @@ begin
                         -- Store data into buf(i)
                         buf(i).data       <= core_msg_array(i);
                         buf(i).message_id <= core_msg_ids(i);
-                        buf(i).last       <= core_msg_last(i); 
                         buf(i).full       <= '1';
                     end if;
                 end loop;
@@ -116,7 +112,8 @@ begin
                         -- Data has been accepted by rsa_msgout
                         output_valid      <= '0';
                         msgout_valid_int  <= '0';
-                        expected_message_id <= std_logic_vector(unsigned(expected_message_id) + 1);                    end if;
+                        expected_message_id <= std_logic_vector(unsigned(expected_message_id) + 1);                        );
+                    end if;
                 else
                     msgout_valid_int <= '0';
                 end if;

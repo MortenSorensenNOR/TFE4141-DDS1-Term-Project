@@ -12,6 +12,8 @@ entity exponentiation is
 
 		--input data
 		message 	: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
+        message_id  : in STD_LOGIC_VECTOR ( ID_WIDTH-1 downto 0 );
+        message_last: in STD_LOGIC;
 		key_e_d 	: in STD_LOGIC_VECTOR ( C_block_size-1 downto 0 );
         key_n 	    : in STD_LOGIC_VECTOR(C_block_size-1 downto 0);
 
@@ -25,7 +27,9 @@ entity exponentiation is
 		valid_out	: out STD_LOGIC;
 
 		--output data
-		msg_out 	: out STD_LOGIC_VECTOR(C_block_size-1 downto 0);
+		msg_out 	    : out STD_LOGIC_VECTOR(C_block_size-1 downto 0);
+        msg_id_out      : out STD_LOGIC_VECTOR(ID_WIDTH-1 downto 0);
+        msg_last_out    : out STD_LOGIC;
 
 		--utility
 		clk 		: in STD_LOGIC;

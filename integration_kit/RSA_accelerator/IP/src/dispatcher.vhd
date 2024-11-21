@@ -20,7 +20,6 @@ entity dispatcher is
         core_ready_array    : in std_logic_vector(NUM_CORES-1 downto 0);
         core_message        : out std_logic_vector(C_BLOCK_SIZE-1 downto 0);
         core_message_id     : out std_logic_vector(ID_WIDTH-1 downto 0);
-        core_message_last   : out std_logic;
         core_select_array   : out std_logic_vector(NUM_CORES-1 downto 0)
     );
 end dispatcher;
@@ -34,8 +33,6 @@ architecture behavioral of dispatcher is
     signal msgin_ready_internal : std_logic := '0';
     signal core_select_internal : std_logic_vector(NUM_CORES-1 downto 0) := (others => '0');
     signal core_message_internal : std_logic_vector(C_BLOCK_SIZE-1 downto 0) := (others => '0');
-
-    signal internal_last : std_logic := '0';
 
 begin
     -- Core Selection and Data Handling Process
@@ -66,9 +63,9 @@ begin
                         -- Set internal signals for core selection and data transfer
                         msgin_ready_internal <= '1';
                         core_message_internal <= msgin_data;
-                        internal_last <= msgin_last;
                         core_select_internal(selected_core_index) <= '1';
                         
+                        -- On the next clock cycle, reset the core selection and increment the message ID
                         core_selected <= '0';  -- Release core selection for next iteration
                     end if;
                 end if;
@@ -89,7 +86,6 @@ begin
     msgin_ready <= msgin_ready_internal;
     core_message <= core_message_internal;
     core_message_id <= core_message_id_reg;
-    core_message_last <= internal_last; --might need to delay this or something
     core_select_array <= core_select_internal;
 
 end behavioral;
