@@ -1,10 +1,14 @@
 library ieee;
 use ieee.std_logic_1164.all;
+library work;
+use work.rsa_types.all;
 
 entity exponentiation is
-	generic (
-		C_block_size : integer := 256
-	);
+    generic (
+        NUM_CORES    : integer := NUM_CORES;
+        C_BLOCK_SIZE : integer := C_BLOCK_SIZE;
+        ID_WIDTH     : integer := ID_WIDTH
+    );
 	port (
 		--input controll
 		valid_in	: in STD_LOGIC;
@@ -76,6 +80,9 @@ architecture expBehave of exponentiation is
     signal mon_pro_B : STD_LOGIC_VECTOR (C_block_size-1 downto 0) := (others => '0');
     signal mon_pro_key_n : STD_LOGIC_VECTOR (C_block_size-1 downto 0) := (others => '0');
     signal mon_pro_sub_val : STD_LOGIC_VECTOR (C_block_size-1 downto 0) := (others => '0');
+
+    signal latcehed_msg_id : STD_LOGIC_VECTOR (ID_WIDTH-1 downto 0) := (others => '0');
+    signal latcehed_msg_last : STD_LOGIC := '0';
 
     -- MonPro output data signals
     signal mon_pro_u : STD_LOGIC_VECTOR (C_block_size-1 downto 0);
@@ -220,6 +227,9 @@ begin
 
                             mon_pro_key_n <= key_n; -- Wont change during RSA compute
                             mon_pro_sub_val <= sub_val_pre;
+
+                            latcehed_msg_id <= message_id;
+                            latcehed_msg_last <= message_last;
                         end if;
 
                     when COMPUTE_M_BAR =>
@@ -287,6 +297,8 @@ begin
                         end if;
                         mon_pro_start <= '0';     
                         msg_out <= x;
+                        msg_id_out <= latcehed_msg_id;
+                        msg_last_out <= latcehed_msg_last;
 
                     when WAIT_DONE_SEND =>
                         if ready_out = '1' then

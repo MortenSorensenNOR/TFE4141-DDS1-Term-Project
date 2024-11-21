@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 package rsa_types is
     -- Generic constants (define these explicitly or make them parameters)
-    constant NUM_CORES    : integer := 8; -- Default values
+    constant NUM_CORES    : integer := 4; -- Default values
     constant ID_WIDTH     : integer := 4;
     constant C_BLOCK_SIZE : integer := 256;
 

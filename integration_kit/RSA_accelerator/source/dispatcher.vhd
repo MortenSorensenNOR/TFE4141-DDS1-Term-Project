@@ -1,12 +1,14 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+library work;
+use work.rsa_types.all;
 
 entity dispatcher is
     generic (
-        NUM_CORES    : integer := 5;
-        C_BLOCK_SIZE : integer := 256;
-        ID_WIDTH     : integer := 3
+        NUM_CORES    : integer := NUM_CORES;
+        C_BLOCK_SIZE : integer := C_BLOCK_SIZE;
+        ID_WIDTH     : integer := ID_WIDTH
     );
     port (
         clk                 : in std_logic;
@@ -27,7 +29,7 @@ end dispatcher;
 
 architecture behavioral of dispatcher is
     -- Internal signals
-    signal core_selected : std_logic := '0';  -- Indicates if a core is selected
+    signal core_selected : integer := 0;  -- Indicates if a core is selected
     signal selected_core_index : integer range 0 to NUM_CORES-1 := 0;  -- Holds the selected core index
     signal core_message_id_reg : std_logic_vector(ID_WIDTH-1 downto 0) := (others => '0');  -- Tracks the message ID
     
@@ -44,23 +46,23 @@ begin
         if rising_edge(clk) then
             if reset_n = '0' then
                 -- Reset all internal signals
-                core_selected <= '0';
+                core_selected <= 0;
                 selected_core_index <= 0;
                 core_message_id_reg <= (others => '0');
                 msgin_ready_internal <= '0';
                 core_select_internal <= (others => '0');
                 core_message_internal <= (others => '0');
             else
-                if core_selected = '0' then
+                if core_selected = 0 then
                     -- Search for an available core
                     for i in 0 to NUM_CORES-1 loop
                         if core_ready_array(i) = '1' then
                             selected_core_index <= i;
-                            core_selected <= '1';
+                            core_selected <= 1;
                             exit;  -- Stop searching once an available core is found
                         end if;
                     end loop;
-                elsif core_selected = '1' then
+                elsif core_selected = 1 then
                     -- If msgin_valid is asserted, proceed to output data
                     if msgin_valid = '1' then
                         -- Set internal signals for core selection and data transfer
@@ -69,17 +71,14 @@ begin
                         internal_last <= msgin_last;
                         core_select_internal(selected_core_index) <= '1';
                         
-                        core_selected <= '0';  -- Release core selection for next iteration
+                        core_selected <= 2;  -- Release core selection for next iteration
                     end if;
-                end if;
-
-                -- Increment message ID whenever data is dispatched
-                if msgin_ready_internal = '1' then
+                elsif core_selected = 2 then
                     core_message_id_reg <= std_logic_vector(unsigned(core_message_id_reg) + 1);
-                    -- Reset internal signals
                     msgin_ready_internal <= '0';
                     core_message_internal <= (others => '0');
                     core_select_internal <= (others => '0');
+                    core_selected <= 0;
                 end if;
             end if;
         end if;

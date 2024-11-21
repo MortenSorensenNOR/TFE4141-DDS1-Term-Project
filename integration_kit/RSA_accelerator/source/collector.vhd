@@ -6,9 +6,9 @@ use work.rsa_types.all;
 
 entity collector is
     generic (
-        NUM_CORES    : integer := 6;
-        C_BLOCK_SIZE : integer := 256;
-        ID_WIDTH     : integer := 3
+        NUM_CORES    : integer := NUM_CORES;
+        C_BLOCK_SIZE : integer := C_BLOCK_SIZE;
+        ID_WIDTH     : integer := ID_WIDTH
     );
 
     port (
@@ -51,11 +51,17 @@ architecture Behavioral of collector is
     signal msgout_valid_int    : std_logic := '0';
     signal msgout_data_int     : std_logic_vector(C_BLOCK_SIZE-1 downto 0) := (others => '0');
     signal msgout_last_int     : std_logic := '0';
+    signal collector_ready_int : std_logic_vector(NUM_CORES-1 downto 0);
 
     signal output_register : std_logic_vector(C_BLOCK_SIZE-1 downto 0) := (others => '0');
     signal output_valid    : std_logic := '0';
 
+    type state_type is (IDLE, SEARCHING, OUTPUTTING);
+    signal current_state : state_type := IDLE;
+
 begin
+
+    -- move all of this stuff into FSM above
     process(clk)
     begin
         if rising_edge(clk) then
@@ -67,20 +73,20 @@ begin
                     buf(i).data <= (others => '0');
                     buf(i).message_id <= (others => '0');
                     buf(i).last <= '0';
-                    collector_ready_array(i) <= '0';
+                    collector_ready_int(i) <= '0';
                 end loop;
                 output_valid       <= '0';
                 msgout_valid_int   <= '0';
                 msgout_data_int    <= (others => '0');
                 msgout_last_int    <= '0'; 
+                
             else
-                -- For each core
+                -- Manage input from exponentiation cores
                 for i in 0 to NUM_CORES-1 loop
-                    -- Generate collector_ready_array(i)
                     if buf(i).full = '0' then
-                        collector_ready_array(i) <= '1';
+                        collector_ready_int(i) <= '1';
                     else
-                        collector_ready_array(i) <= '0';
+                        collector_ready_int(i) <= '0';
                     end if;
 
                     -- Check if we can accept data from core i
@@ -93,40 +99,49 @@ begin
                     end if;
                 end loop;
 
+
                 -- Manage output to rsa_msgout
-                if output_valid = '0' then
-                    -- Check if any buffer slot contains expected_message_id
+                if current_state = SEARCHING then
+
+
+
                     for i in 0 to NUM_CORES-1 loop
-                        if buf(i).full = '1' and buf(i).message_id = expected_message_id then
-                            -- Found the expected message
-                            output_register <= buf(i).data;
-                            output_valid    <= '1';
+                        if buf(i).full = '1' and buf(i).message_id = expected_message_id then -- Found the expected message
+
+                            msgout_valid_int <= '1';
+                            msgout_data_int  <= buf(i).data;
+                            msgout_last_int  <= buf(i).last;
                             buf(i).full      <= '0'; -- Mark buffer slot as empty
-                            exit; -- Exit the loop once found
+
+                            current_state <= OUTPUTTING;
+                            exit;
                         end if;
                     end loop;
-                end if;
+
 
                 -- Handle output to rsa_msgout
-                if output_valid = '1' then
-                    msgout_valid_int <= '1';
-                    msgout_data_int  <= output_register;
-                    msgout_last_int  <= '0';  -- Set accordingly if required
-                    if msgout_ready = '1' then
-                        -- Data has been accepted by rsa_msgout
-                        output_valid      <= '0';
+                elsif current_state = OUTPUTTING then
+                    if msgout_ready = '1' then -- Data has been accepted by rsa_msgout
+                        --output_valid      <= '0';
                         msgout_valid_int  <= '0';
-                        expected_message_id <= std_logic_vector(unsigned(expected_message_id) + 1);                    end if;
-                else
-                    msgout_valid_int <= '0';
+                        msgout_data_int   <= (others => '0'); 
+                        msgout_last_int   <= '0';
+                        expected_message_id <= std_logic_vector(unsigned(expected_message_id) + 1);
+                        current_state <= SEARCHING;
+                    end if;
+                else -- IDLE state
+                    current_state <= SEARCHING;
                 end if;
+                
             end if;
         end if;
     end process;
+    
 
     -- Assign outputs to internal signals
     msgout_valid <= msgout_valid_int;
     msgout_data  <= msgout_data_int;
     msgout_last  <= msgout_last_int;  -- Adjust as needed
+    collector_ready_array <= collector_ready_int;
 
 end Behavioral;
