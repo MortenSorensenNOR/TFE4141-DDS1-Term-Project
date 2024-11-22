@@ -65,12 +65,14 @@ architecture behavioral of monpro_new is
 begin
 
     -- Main adder of the MonPro unit, optimized for clock frequency
-    u_adder257 : entity work.adder257(behavioral)
+    u_adder257 : entity work.adder257dsp(structural_dsp)
     generic map (
-        DATA_SIZE => DATA_SIZE
+        DATA_SIZE => DATA_SIZE,
+        NB_STAGE => 6
     )
     port map (
         clk => clk,
+        rst => not(srstn),
         ready => adder_ready,
 
         i_A  => adder_input_1,
