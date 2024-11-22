@@ -25,8 +25,8 @@ architecture behavioral of uvvm_monpro is
     -- CONSTANTS
     -----------------------------------------------------------------
     -- TEST Related
-    constant VECTORS_TESTING_FILE : string := "C:\Users\cmion\Documents\NTNU\TFE4141-DDS1-Term-Project\integration_kit\Exponentiation\testing_files\raw_mon_pro_test_data.txt";
-    constant NB_VAL : integer := 4;    -- number of column value per vectors
+    constant VECTORS_TESTING_FILE : string := "C:\Users\cmion\Documents\NTNU\TFE4141-DDS1-Term-Project\integration_kit\Exponentiation\testing_files\raw_monpro_new_test_data.txt";
+    constant NB_VAL : integer := 5;    -- number of column value per vectors
     constant C_CLK_PERIOD : time := 10 ns;    -- clock period
     -- DUT related
     constant DATA_SIZE : integer := 256;
@@ -47,12 +47,14 @@ architecture behavioral of uvvm_monpro is
     signal dut_i_B : std_logic_vector (DATA_SIZE-1 downto 0) := (OTHERS => '0');
     signal dut_i_N : std_logic_vector (DATA_SIZE-1 downto 0) := (OTHERS => '0');
     signal dut_o_U : std_logic_vector (DATA_SIZE-1 downto 0) := (OTHERS => '0');
+    signal dut_i_M : std_logic_vector (DATA_SIZE-1 downto 0) := (OTHERS => '0');
+
     
 begin
     ---------------------------------------
     -- DUT : Monpro_sv
     ---------------------------------------
-    DUT : entity work.monpro(behavioral)
+    DUT : entity work.monpro_new(behavioral)
     generic map (
         DATA_SIZE => DATA_SIZE
     )
@@ -67,6 +69,7 @@ begin
         i_A => dut_i_A,
         i_B => dut_i_B,
         i_N => dut_i_N,
+        i_M => dut_i_M,
         o_U => dut_o_U
     );
 
@@ -132,6 +135,7 @@ begin
             dut_i_B <= v_data_read(1);
             dut_i_N <= v_data_read(2);
             v_excepted_result := v_data_read(3);
+            dut_i_M <= v_data_read(4);
             ----- Logging read values -----
             log("~~~~ TEST VECTOR N°" & to_string(v_num_vect) & " ~~~~");
             --log("-> Read A : " & integer'image(v_data_read(0)));
@@ -146,19 +150,19 @@ begin
 
             
             log("Waiting for Ready signal");
-            await_value(dut_ready, '1', 0 ns, 5* C_CLK_PERIOD, ERROR, "Ready should be ='1' before assigning '1' to start");
+            await_value(dut_ready, '1', 0 ns, 5* C_CLK_PERIOD, ERROR, "Checking that Ready='1' BEFORE assigning '1' to start");
             wait until rising_edge(clk);
             wait until rising_edge(clk);
             wait until rising_edge(clk);
             gen_pulse(dut_start, 2 * C_CLK_PERIOD, "Pulsed start-signal - active for 1T");
-            await_value(dut_ready, '0', 0 ns, 5* C_CLK_PERIOD, ERROR, "Ready should be ='0' after receiving start='1'");
+            await_value(dut_ready, '0', 0 ns, 5* C_CLK_PERIOD, ERROR, "Checking that Ready='0' AFTER receiving start='1'");
 
             
             -- Waiting valid signal .....
             log("Waiting valid signal");
-            await_value(dut_o_valid, '1', 0 ns, 1024* C_CLK_PERIOD, ERROR, "Valid result should be ='1' after MAXIMUM 1024 clk tick");
+            await_value(dut_o_valid, '1', 0 ns, 6*1024* C_CLK_PERIOD, ERROR, "Waiting for Valid='1' (until 6*1024*T) to get the result");
 
-            check_value(dut_o_U, v_excepted_result, ERROR, "Wrong Result");
+            check_value(dut_o_U, v_excepted_result, ERROR, "Comparing wanted result with DUT result");
              
         end loop;
 
