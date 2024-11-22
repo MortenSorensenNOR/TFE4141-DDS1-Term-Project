@@ -175,6 +175,28 @@ begin
         );
 
 
+    -- Status register debug process
+    -- track the status of the cores (their ready signals)
+    -- track dispatch_message_id send to the cores
+    -- track if the collector is filled or ready to accept new data
+    process (clk) is
+    begin
+        if rising_edge(clk) then
+            --fill the first NUM_CORES bits with the ready signals
+            for i in 0 to NUM_CORES-1 loop
+                rsa_status(i) <= core_ready_array(i);
+            end loop;
+            --add the dispatch_message_id to the status register
+            for i in 0 to ID_WIDTH-1 loop
+                rsa_status(NUM_CORES+i) <= dispatch_message_id(i);
+            end loop;
+            --add the collector ready signals to the status register
+            for i in 0 to NUM_CORES-1 loop
+                rsa_status(NUM_CORES+ID_WIDTH+i) <= collector_ready_array(i);
+            end loop;
+        end if;
+    end process;
+
 
 end rtl;
 

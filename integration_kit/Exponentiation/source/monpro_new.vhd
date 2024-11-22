@@ -61,16 +61,19 @@ architecture behavioral of monpro_new is
                         MONPRO_LAST_SUB,
                         MONPRO_DONE );
     signal current_state, next_state : FSM_STATE; 
+
+    signal reset : std_logic := '0'; -- inverted reset signal, just 0 for now
     
 begin
 
     -- Main adder of the MonPro unit, optimized for clock frequency
-    u_adder257 : entity work.adder257(behavioral)
+    u_adder257 : entity work.adder257dsp(structural_dsp)
     generic map (
         DATA_SIZE => DATA_SIZE
     )
     port map (
         clk => clk,
+        rst => reset,
         ready => adder_ready,
 
         i_A  => adder_input_1,
