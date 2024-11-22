@@ -140,7 +140,9 @@ architecture rtl of rsa_regio is
 	-- Signals for user logic register space example
 	------------------------------------------------
 	-- Number of Slave Registers 33
-	type slv_reg_type is array(C_register_count downto 0) of std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
+	type slv_reg_type is array(C_register_count-1 downto 0) of std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0); --Y -1 on C_register_count
+	-- prevoisly: 
+	--type slv_reg_type is array(C_register_count downto 0) of std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
 	signal slv_reg 		: slv_reg_type;
 	signal slv_reg_rden : std_logic;
 	signal slv_reg_wren : std_logic;
@@ -254,16 +256,22 @@ begin
 				slv_reg(32) <= rsa_status;
 
 				if (slv_reg_wren = '1') then
-					for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
-						if ( S_AXI_WSTRB(byte_index) = '1' ) then
+					if (to_integer(unsigned(loc_addr)) /= 32) then -- DONT OVERWRITE THE STATUS REGISTER
+						for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
+							if ( S_AXI_WSTRB(byte_index) = '1' ) then
+								slv_reg(to_integer(unsigned(loc_addr)))(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
+							end if;
+
+							--previous code:
 							-- Respective byte enables are asserted as per write strobes
 							-- slave registers 0-31
 							-- only write to first half of registers
-							if (loc_addr(OPT_MEM_ADDR_BITS) = '0') then
-								slv_reg(to_integer(unsigned(loc_addr(OPT_MEM_ADDR_BITS-1 downto 0))))(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
-							end if;
-						end if;
-					end loop;
+
+							-- if (loc_addr(OPT_MEM_ADDR_BITS) = '0') then
+							-- 	slv_reg(to_integer(unsigned(loc_addr(OPT_MEM_ADDR_BITS-1 downto 0))))(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
+							-- end if;
+						end loop;
+					end if;
 				end if;
 			end if;
 		end if;
@@ -358,12 +366,16 @@ begin
 			-- read from slave registers
 			-- read from all registers
 			-- potentially remove case to unlock all registers
-			case (loc_addr(OPT_MEM_ADDR_BITS)) is
-				when '0' =>
-					reg_data_out <= slv_reg(to_integer(unsigned(loc_addr(OPT_MEM_ADDR_BITS-1 downto 0))));
-				when others =>
-					reg_data_out <= slv_reg(32);
-			end case;
+			
+			reg_data_out <= slv_reg(to_integer(unsigned(loc_addr(OPT_MEM_ADDR_BITS-1 downto 0))));
+
+			-- the old case stuff:
+			-- case (loc_addr(OPT_MEM_ADDR_BITS)) is
+			-- 	when '0' =>
+			-- 		reg_data_out <= slv_reg(to_integer(unsigned(loc_addr(OPT_MEM_ADDR_BITS-1 downto 0))));
+			-- 	when others =>
+			-- 		reg_data_out <= slv_reg(32);
+			-- end case;
 	end process;
 
 	-- Output register or memory read data
