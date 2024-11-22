@@ -20,70 +20,53 @@ entity adder257 is
 end adder257;
 
 architecture behavioral of adder257 is
-    type chunk_array_t is array (natural range <>) of std_logic_vector(63 downto 0);
+    type chunk_array_t is array (natural range <>) of std_logic_vector(48 downto 0);
 
     -- SIGNALS
-    signal iter : integer range 0 to 3;
+    signal iter : integer range 0 to 6;
 
-    signal A_blocks     : chunk_array_t(3 downto 0) := (others => (others => '0'));
-    signal B_blocks     : chunk_array_t(3 downto 0) := (others => (others => '0'));
-    signal A_upper      : std_logic_vector(0 downto 0) := "0";
-    signal B_upper      : std_logic_vector(0 downto 0) := "0";
+    signal A_blocks     : chunk_array_t(5 downto 0) := (others => (others => '0'));
+    signal B_blocks     : chunk_array_t(5 downto 0) := (others => (others => '0'));
 
-    signal carry        : std_logic_vector(0 downto 0) := (others => '0');
-
-    signal C_blocks     : chunk_array_t(3 downto 0) := (others => (others => '0'));
-    signal C_carry      : std_logic_vector(1 downto 0);
+    signal C_blocks     : chunk_array_t(5 downto 0) := (others => (others => '0'));
 begin
 
     process (i_A, i_B) begin
-        A_blocks(0) <= i_A(63  downto   0);
-        A_blocks(1) <= i_A(127 downto  64);
-        A_blocks(2) <= i_A(191 downto 128);
-        A_blocks(3) <= i_A(255 downto 192);
+        A_blocks(0) <= '0' & i_A(47  downto   0);
+        A_blocks(1) <= '0' & i_A(95  downto  48);
+        A_blocks(2) <= '0' & i_A(143 downto  96);
+        A_blocks(3) <= '0' & i_A(191 downto 144);
+        A_blocks(4) <= '0' & i_A(239 downto 192);
+        A_blocks(5) <= (others => '0') & i_A(256 downto 239);
 
-        B_blocks(0) <= i_B(63  downto   0);
-        B_blocks(1) <= i_B(127 downto  64);
-        B_blocks(2) <= i_B(191 downto 128);
-        B_blocks(3) <= i_B(255 downto 192);
-
-        A_upper     <= i_A(256 downto 256);
-        B_upper     <= i_B(256 downto 256);
+        B_blocks(0) <= '0' & i_B(47  downto   0);
+        B_blocks(1) <= '0' & i_B(95  downto  48);
+        B_blocks(2) <= '0' & i_B(143 downto  96);
+        B_blocks(3) <= '0' & i_B(191 downto 144);
+        B_blocks(4) <= '0' & i_B(239 downto 192);
+        B_blocks(5) <= (others => '0') & i_B(256 downto 239);
     end process;
 
-    adder_process: process (clk) 
-        variable sum_with_carry : std_logic_vector(64 downto 0);
-        variable carry_last     : std_logic_vector(64 downto 0) := (others => '0');
-    begin
+    adder_process: process (clk) begin
         if rising_edge(clk) then
             if (i_dv = '1') then
                 iter <= 1;
                 o_dv <= '0';
-                C_blocks(1) <= (others => '0');
-                C_blocks(2) <= (others => '0');
-                C_blocks(3) <= (others => '0');
-                carry <= (others => '0');
-                carry_last := (others => '0');
-            elsif (iter = 3) then
+            elsif (iter = 6) then
                 iter <= 0;
             elsif (iter /= 0) then
                 iter <= iter + 1;
             end if;
 
-            -- Addition
-            if (iter = 0) then
-                carry_last(0) := '0';
-            else
-                carry_last(0) := carry(0);
-            end if;
-
-            sum_with_carry := std_logic_vector(unsigned('0' & A_blocks(iter)) + unsigned('0' & B_blocks(iter)) + unsigned(carry_last));
-
-            C_blocks(iter) <= sum_with_carry(63 downto 0);
-            carry <= sum_with_carry(64 downto 64);
+            C_blocks(0) <= std_logic_vector(unsigned(A_blocks(0)) + unsigned(B_blocks(0)))        
+            C_blocks(1) <= std_logic_vector(unsigned(A_blocks(0)) + unsigned(B_blocks(0)) + unsigned(C_blocks(0)(48)))        
+            C_blocks(2) <= std_logic_vector(unsigned(A_blocks(0)) + unsigned(B_blocks(0)) + unsigned(C_blocks(1)(48)))        
+            C_blocks(3) <= std_logic_vector(unsigned(A_blocks(0)) + unsigned(B_blocks(0)) + unsigned(C_blocks(2)(48)))        
+            C_blocks(4) <= std_logic_vector(unsigned(A_blocks(0)) + unsigned(B_blocks(0)) + unsigned(C_blocks(3)(48)))        
+            C_blocks(5) <= std_logic_vector(unsigned(A_blocks(0)) + unsigned(B_blocks(0)) + unsigned(C_blocks(4)(48)))        
 
             -- Output valid
-            if (iter = 3) then
+            if (iter = 6) then
                 o_dv <= '1';
             else 
                 o_dv <= '0';
@@ -91,11 +74,10 @@ begin
         end if;
     end process;
 
-    carry_process: process (carry, A_upper, B_upper) begin
-        C_carry <= std_logic_vector(unsigned('0' & A_upper) + unsigned('0' & B_upper) + unsigned('0' & carry));
-    end process;
+    o_C <= C_blocks(5)(17 downto 0) & C_blocks(4)(47 downto 0) & 
+           C_blocks(3)(47 downto 0) & C_blocks(2)(47 downto 0) & 
+           C_blocks(1)(47 downto 0) & C_blocks(0)(47 downto 0);
 
-    o_C <= C_carry & C_blocks(3) & C_blocks(2) & C_blocks(1) & C_blocks(0);
     ready <= '1' when iter = 0 else '0';
 
 end architecture;
