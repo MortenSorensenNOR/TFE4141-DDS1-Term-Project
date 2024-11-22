@@ -370,7 +370,7 @@ begin
 			-- read from all registers
 			-- potentially remove case to unlock all registers
 			
-			reg_data_out <= slv_reg(to_integer(unsigned(loc_addr(OPT_MEM_ADDR_BITS-1 downto 0))));
+			reg_data_out <= slv_reg(to_integer(unsigned(loc_addr(OPT_MEM_ADDR_BITS downto 0))));
 
 			-- the old case stuff:
 			-- case (loc_addr(OPT_MEM_ADDR_BITS)) is
