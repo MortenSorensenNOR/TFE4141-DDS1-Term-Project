@@ -65,16 +65,16 @@ begin
         A_blocks(2) <= i_A(143 downto  96);
         A_blocks(3) <= i_A(191 downto 144);
         A_blocks(4) <= i_A(239 downto 192);
-        A_blocks(5)(17 downto 0) <= i_A(256 downto 239);
-        A_blocks(5)(47 downto 18) <= (others => '0');
+        A_blocks(5)(16 downto 0) <= i_A(256 downto 240);
+        A_blocks(5)(47 downto 17) <= (others => '0');
 
         B_blocks(0) <= i_B(47  downto   0);
         B_blocks(1) <= i_B(95  downto  48);
         B_blocks(2) <= i_B(143 downto  96);
         B_blocks(3) <= i_B(191 downto 144);
         B_blocks(4) <= i_B(239 downto 192);
-        B_blocks(5)(17 downto 0) <= i_B(256 downto 239);
-        B_blocks(5)(47 downto 18) <= (others => '0');
+        B_blocks(5)(16 downto 0) <= i_B(256 downto 240);
+        B_blocks(5)(47 downto 17) <= (others => '0');
     end process;
 
 
