@@ -10,16 +10,19 @@
 -- Project      : RSA accelerator
 -- License      : This is free and unencumbered software released into the
 --                public domain (UNLICENSE)
+-- Modified	    : Modified by team 12, 22th/Nov/2024
 --------------------------------------------------------------------------------
 -- Purpose:
---   This module contains 33 registers of 32 bit each. The registers can be
+--   This module contains 64 registers of 32 bit each. The registers can be
 --   accessed trough an AXI Lite interface.
 --
 --   Registers   [7..0]: Used for the 256 bit key_n
 --   Registers  [15..8]: Used for the 256 bit key_e/key_d
---   Registers [31..16]: Unused
+--   Registers [23..16]: r_precomputed
+--   Registers [31..24]: r_pow2_precomputed
 --   Register      [32]: Status register
---   Registers [63..33]: unimplemented, easy to add
+--   Registers [40..33]: sub_val_precomputed
+--   Registers [63..41]: unused
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
