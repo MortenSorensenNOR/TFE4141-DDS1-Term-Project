@@ -176,9 +176,7 @@ begin
 
 
     -- Status register debug process
-    -- track the status of the cores (their ready signals)
-    -- track dispatch_message_id send to the cores
-    -- track if the collector is filled or ready to accept new data
+
     process (clk) is
     begin
         if rising_edge(clk) then
