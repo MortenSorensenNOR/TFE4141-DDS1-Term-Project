@@ -171,7 +171,7 @@ begin
                 end if;
 
             when MONPRO_LAST_SUB =>
-                if (adder_o_dv) then
+                if (adder_o_dv='1') then
                     next_state <= MONPRO_DONE;
                 end if;
 

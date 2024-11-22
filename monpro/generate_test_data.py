@@ -12,6 +12,7 @@ class MonProTestData:
         self.N = n
         self.k = k
         self.U = U
+        self.M = (1<<k)-n
 
         self.higher = U > n
 
@@ -31,12 +32,13 @@ class MonProTestData:
         A_txt = f"{self.A:064x} "
         B_txt = f"{self.B:064x} "
         N_txt = f"{self.N:064x} "
-        U_txt = f"{self.U:064x}\n"
+        U_txt = f"{self.U:064x} "
+        M_txt = f"{self.M:064x}\n"
 
 
         # if self.higher:
         #     return "HIGHER\n" + A_txt + B_txt + N_txt + U_txt
-        return A_txt + B_txt + N_txt + U_txt
+        return A_txt + B_txt + N_txt + U_txt + M_txt
 
 class MonExpTestData:
     def __init__(self, M, key_e_d, n, k, x):
@@ -126,7 +128,7 @@ for i in range(10):
     mon_exp_test_data.append(MonExpTestData(x_mont_encrypt, d, n, k, x_mont_decrypt))
 
 print(f"MonPro Test Data length: {len(mon_pro_test_data)}")
-write_test_data_to_file(mon_pro_test_data, "./raw_mon_pro_test_data.txt")
+write_test_data_to_file(mon_pro_test_data, "../integration_kit/exponentiation/testing_files/raw_monpro_new_test_data.txt")
 
 print(f"MonExp Test Data length: {len(mon_exp_test_data)}")
 write_test_data_to_file(mon_exp_test_data, "mon_exp_test_data.txt")
