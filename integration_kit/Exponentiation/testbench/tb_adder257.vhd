@@ -44,6 +44,8 @@ architecture Behavioral of tb_adder257 is
     constant C_VAL : std_logic_vector (DATA_SIZE+1 downto 0) :=  "101101010011111000111000001000001100111010011000110110011011100110001111010100111011011100101000101111001001111100101111000001001011011001001100100001101100000101000000001001010001001101111101100011010111111110000011110011010011010100011001111100011100011011";
     
     signal clk : std_logic := '0';
+    signal rst : std_logic := '0';    
+    
     signal ready : std_logic;
 
     signal i_A : std_logic_vector (256 downto 0);
@@ -55,12 +57,14 @@ architecture Behavioral of tb_adder257 is
 
 begin
     
-    DUT : entity work.adder257(behavioral)
+    DUT : entity work.adder257dsp(structural_dsp)
     generic map (
-        DATA_SIZE => DATA_SIZE
+        DATA_SIZE => DATA_SIZE,
+        NB_STAGE => 6
     )
     port map (
         clk => clk,
+        rst => rst,
         ready => ready,
         
         i_A => i_A,
@@ -77,7 +81,9 @@ begin
         i_A <= (others => '0');
         i_B <= (others => '0');
         i_dv <= '0';
+        rst <= '1';
         wait until rising_edge(clk);
+        rst <= '0';
         wait until rising_edge(clk);
         i_A <= A_VAL;
         i_B <= B_VAL;
